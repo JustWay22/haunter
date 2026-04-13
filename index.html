@@ -32,6 +32,8 @@
             --accent-red-glow: rgba(255, 59, 92, 0.4);
             --accent-cyan: #00D4FF;
             --accent-cyan-glow: rgba(0, 212, 255, 0.3);
+            --accent-orange: #FF8C00;
+            --accent-orange-glow: rgba(255, 140, 0, 0.4);
         }
 
         body {
@@ -264,6 +266,47 @@
         @keyframes pageSlide {
             from { opacity: 0; transform: translateY(10px); }
             to { opacity: 1; transform: translateY(0); }
+        }
+
+        /* Page Title */
+        .page-title {
+            font-size: 28px;
+            font-weight: 800;
+            margin-bottom: 8px;
+            letter-spacing: -0.5px;
+        }
+
+        .page-subtitle {
+            color: var(--text-secondary);
+            font-size: 14px;
+            margin-bottom: 24px;
+        }
+
+        /* Back button */
+        .back-btn {
+            display: inline-flex;
+            align-items: center;
+            gap: 8px;
+            color: var(--text-secondary);
+            background: none;
+            border: none;
+            cursor: pointer;
+            font-size: 15px;
+            font-weight: 500;
+            margin-bottom: 24px;
+            padding: 8px 0;
+            transition: color 0.2s ease;
+            font-family: inherit;
+            text-decoration: none;
+        }
+
+        .back-btn:hover {
+            color: var(--text-primary);
+        }
+
+        .back-btn svg {
+            width: 20px;
+            height: 20px;
         }
 
         /* Home Page */
@@ -718,6 +761,39 @@
             transform: scale(0.98);
         }
 
+        /* Basketball Card - Orange Glow */
+        .game-card.basketball-card {
+            background: linear-gradient(135deg, rgba(255, 140, 0, 0.1) 0%, rgba(255, 140, 0, 0.03) 100%);
+            border: 1px solid rgba(255, 140, 0, 0.3);
+        }
+
+        .game-card.basketball-card:hover {
+            border-color: rgba(255, 140, 0, 0.5);
+            box-shadow: 0 8px 30px var(--accent-orange-glow);
+        }
+
+        /* NEW Badge */
+        .new-badge {
+            position: absolute;
+            top: 12px;
+            right: 12px;
+            background: linear-gradient(135deg, var(--accent-orange), #FF6B00);
+            color: #fff;
+            padding: 4px 10px;
+            border-radius: 20px;
+            font-size: 10px;
+            font-weight: 700;
+            text-transform: uppercase;
+            letter-spacing: 1px;
+            box-shadow: 0 2px 10px var(--accent-orange-glow);
+            animation: pulseBadge 2s ease-in-out infinite;
+        }
+
+        @keyframes pulseBadge {
+            0%, 100% { transform: scale(1); }
+            50% { transform: scale(1.05); }
+        }
+
         .game-card-icon {
             width: 64px;
             height: 64px;
@@ -743,7 +819,7 @@
         }
 
         .game-card p {
-            font-size: 13px;
+            font-size: 12px;
             color: var(--text-secondary);
         }
 
@@ -763,13 +839,13 @@
 
         .btn-primary {
             background: linear-gradient(135deg, var(--accent-gold), #E8850A);
-            color: #000;
+            color: #fff;
             box-shadow: 0 4px 20px var(--accent-gold-glow);
         }
 
         .btn-primary:hover {
             transform: translateY(-2px);
-            box-shadow: 0 8px 30px var(--accent-gold-glow);
+            box-shadow: 0 6px 25px var(--accent-gold-glow);
         }
 
         .btn-primary:active {
@@ -777,32 +853,9 @@
         }
 
         .btn-primary:disabled {
-            opacity: 0.4;
+            opacity: 0.5;
             cursor: not-allowed;
             transform: none;
-            box-shadow: none;
-        }
-
-        .btn-success {
-            background: linear-gradient(135deg, var(--accent-green), #00CC6A);
-            color: #000;
-            box-shadow: 0 4px 20px var(--accent-green-glow);
-        }
-
-        .btn-success:hover {
-            transform: translateY(-2px);
-            box-shadow: 0 8px 30px var(--accent-green-glow);
-        }
-
-        .btn-danger {
-            background: linear-gradient(135deg, var(--accent-red), #CC2E4A);
-            color: #fff;
-            box-shadow: 0 4px 20px var(--accent-red-glow);
-        }
-
-        .btn-danger:hover {
-            transform: translateY(-2px);
-            box-shadow: 0 8px 30px var(--accent-red-glow);
         }
 
         .btn-secondary {
@@ -813,102 +866,46 @@
 
         .btn-secondary:hover {
             background: var(--bg-card-hover);
-            border-color: rgba(255, 255, 255, 0.15);
         }
 
-        /* Crash Game */
-        .crash-container {
-            background: var(--bg-card);
-            border: 1px solid var(--border-color);
-            border-radius: 24px;
-            padding: 24px;
-            margin-top: 20px;
+        .btn-success {
+            background: linear-gradient(135deg, var(--accent-green), #00CC6A);
+            color: #000;
+            box-shadow: 0 4px 20px var(--accent-green-glow);
         }
 
-        .crash-display {
-            height: 280px;
-            background: linear-gradient(180deg, rgba(0, 212, 255, 0.03) 0%, transparent 100%);
-            border: 1px solid var(--border-color);
-            border-radius: 20px;
-            position: relative;
-            overflow: hidden;
-            margin-bottom: 20px;
+        .btn-danger {
+            background: linear-gradient(135deg, var(--accent-red), #E62E4D);
+            color: #fff;
+            box-shadow: 0 4px 20px var(--accent-red-glow);
         }
 
-        .crash-grid {
-            position: absolute;
-            inset: 0;
-            background-image: 
-                linear-gradient(rgba(255,255,255,0.03) 1px, transparent 1px),
-                linear-gradient(90deg, rgba(255,255,255,0.03) 1px, transparent 1px);
-            background-size: 40px 40px;
+        .btn-basketball {
+            background: linear-gradient(135deg, var(--accent-orange), #FF6B00);
+            color: #fff;
+            box-shadow: 0 4px 20px var(--accent-orange-glow), inset 0 0 30px rgba(255, 140, 0, 0.3);
+            border: 2px solid rgba(255, 140, 0, 0.5);
+            width: 100%;
         }
 
-        .crash-multiplier {
-            position: absolute;
-            top: 50%;
-            left: 50%;
-            transform: translate(-50%, -50%);
-            font-size: 64px;
-            font-weight: 900;
-            color: var(--accent-green);
-            letter-spacing: -3px;
-            text-shadow: 0 0 40px var(--accent-green-glow);
-            transition: color 0.3s ease, text-shadow 0.3s ease;
+        .btn-basketball:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 8px 30px var(--accent-orange-glow), inset 0 0 40px rgba(255, 140, 0, 0.4);
         }
 
-        .crash-multiplier.crashed {
-            color: var(--accent-red);
-            text-shadow: 0 0 40px var(--accent-red-glow);
+        .btn-basketball:disabled {
+            opacity: 0.4;
+            cursor: not-allowed;
+            transform: none;
+            box-shadow: none;
         }
 
-        .crash-rocket {
-            position: absolute;
-            bottom: 20px;
-            left: 20px;
-            width: 120px;
-            height: 120px;
-            transition: all 0.1s linear;
-            filter: drop-shadow(0 0 20px var(--accent-cyan-glow));
-        }
-
-        .crash-rocket.flying {
-            animation: rocketShake 0.1s infinite;
-        }
-
-        .crash-rocket.crashed {
-            bottom: auto;
-            left: auto;
-            top: -100px;
-            right: -100px;
-            transform: scale(0.2) rotate(45deg);
-            transition: all 1s ease-out;
-            opacity: 0;
-        }
-
-        @keyframes rocketShake {
-            0%, 100% { transform: translateX(0) rotate(-45deg); }
-            50% { transform: translateX(2px) rotate(-43deg); }
-        }
-
-        .crash-status {
-            text-align: center;
-            font-size: 14px;
-            color: var(--text-secondary);
-            margin-bottom: 20px;
-            font-weight: 500;
-        }
-
-        .crash-controls {
-            display: flex;
-            flex-direction: column;
-            gap: 16px;
-        }
-
+        /* Bet Controls */
         .bet-input-group {
             display: flex;
             gap: 12px;
             align-items: center;
+            margin-bottom: 16px;
         }
 
         .bet-input {
@@ -957,6 +954,85 @@
             border-color: rgba(255, 255, 255, 0.15);
         }
 
+        /* Crash Game */
+        .crash-container {
+            background: var(--bg-card);
+            border: 1px solid var(--border-color);
+            border-radius: 24px;
+            padding: 24px;
+            margin-top: 20px;
+        }
+
+        .crash-display {
+            position: relative;
+            height: 220px;
+            background: var(--bg-secondary);
+            border-radius: 16px;
+            margin-bottom: 20px;
+            overflow: hidden;
+        }
+
+        .crash-grid {
+            position: absolute;
+            inset: 0;
+            background-image: 
+                linear-gradient(rgba(255,255,255,0.03) 1px, transparent 1px),
+                linear-gradient(90deg, rgba(255,255,255,0.03) 1px, transparent 1px);
+            background-size: 30px 30px;
+        }
+
+        .crash-multiplier {
+            position: absolute;
+            top: 50%;
+            left: 50%;
+            transform: translate(-50%, -50%);
+            font-size: 48px;
+            font-weight: 900;
+            background: linear-gradient(135deg, var(--accent-cyan), var(--accent-green));
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            background-clip: text;
+            text-shadow: none;
+        }
+
+        .crash-multiplier.crashed {
+            background: linear-gradient(135deg, var(--accent-red), #FF1744);
+            -webkit-background-clip: text;
+            background-clip: text;
+        }
+
+        .crash-rocket {
+            position: absolute;
+            bottom: 30px;
+            left: 30px;
+            width: 60px;
+            height: 60px;
+            object-fit: contain;
+            transition: all 0.1s linear;
+        }
+
+        .crash-rocket.flying {
+            filter: drop-shadow(0 0 20px var(--accent-cyan-glow));
+        }
+
+        .crash-rocket.crashed {
+            transform: rotate(180deg);
+        }
+
+        .crash-status {
+            text-align: center;
+            margin-bottom: 20px;
+            font-size: 14px;
+            font-weight: 600;
+            color: var(--text-secondary);
+        }
+
+        .crash-controls {
+            display: flex;
+            flex-direction: column;
+            gap: 12px;
+        }
+
         .crash-btns {
             display: flex;
             gap: 12px;
@@ -966,7 +1042,7 @@
             flex: 1;
         }
 
-        /* Coin Flip */
+        /* Coin Flip Game */
         .coinflip-container {
             background: var(--bg-card);
             border: 1px solid var(--border-color);
@@ -978,9 +1054,9 @@
         .coinflip-display {
             height: 200px;
             display: flex;
-            justify-content: center;
             align-items: center;
-            margin-bottom: 24px;
+            justify-content: center;
+            margin-bottom: 20px;
         }
 
         .coin {
@@ -990,73 +1066,26 @@
             transform-style: preserve-3d;
         }
 
-        .coin.flipping {
-            animation: coinFlip 2s ease-in-out;
-        }
-
-        @keyframes coinFlip {
-            0% { transform: rotateY(0deg); }
-            100% { transform: rotateY(1800deg); }
-        }
-
         .coin img {
+            position: absolute;
             width: 100%;
             height: 100%;
-            position: absolute;
             border-radius: 50%;
             backface-visibility: hidden;
-            box-shadow: 0 10px 40px rgba(0, 0, 0, 0.5);
-        }
-
-        .coin .heads {
-            transform: rotateY(0deg);
+            box-shadow: 0 10px 30px rgba(0,0,0,0.3);
         }
 
         .coin .tails {
             transform: rotateY(180deg);
         }
 
-        .coinflip-choice {
-            display: flex;
-            gap: 16px;
-            justify-content: center;
-            margin-bottom: 24px;
+        .coin.flipping {
+            animation: coinFlip 2s ease-in-out forwards;
         }
 
-        .choice-btn {
-            background: var(--bg-card);
-            border: 2px solid var(--border-color);
-            border-radius: 20px;
-            padding: 20px 32px;
-            color: var(--text-primary);
-            cursor: pointer;
-            transition: all 0.3s ease;
-            display: flex;
-            flex-direction: column;
-            align-items: center;
-            gap: 10px;
-        }
-
-        .choice-btn:hover {
-            border-color: rgba(255, 255, 255, 0.2);
-            background: var(--bg-card-hover);
-        }
-
-        .choice-btn.selected {
-            border-color: var(--accent-gold);
-            background: rgba(247, 147, 26, 0.1);
-            box-shadow: 0 0 30px var(--accent-gold-glow);
-        }
-
-        .choice-btn img {
-            width: 56px;
-            height: 56px;
-            border-radius: 50%;
-        }
-
-        .choice-btn span {
-            font-weight: 600;
-            font-size: 14px;
+        @keyframes coinFlip {
+            0% { transform: rotateY(0); }
+            100% { transform: rotateY(1800deg); }
         }
 
         .coinflip-result {
@@ -1064,7 +1093,7 @@
             font-size: 24px;
             font-weight: 800;
             margin-bottom: 20px;
-            min-height: 36px;
+            min-height: 32px;
         }
 
         .coinflip-result.win {
@@ -1077,11 +1106,226 @@
             text-shadow: 0 0 20px var(--accent-red-glow);
         }
 
+        .coinflip-choice {
+            display: flex;
+            gap: 16px;
+            margin-bottom: 24px;
+        }
+
+        .choice-btn {
+            flex: 1;
+            background: var(--bg-secondary);
+            border: 2px solid var(--border-color);
+            border-radius: 16px;
+            padding: 20px;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            gap: 12px;
+        }
+
+        .choice-btn img {
+            width: 50px;
+            height: 50px;
+            border-radius: 50%;
+        }
+
+        .choice-btn span {
+            color: var(--text-primary);
+            font-weight: 600;
+            font-size: 14px;
+        }
+
+        .choice-btn.selected {
+            border-color: var(--accent-gold);
+            background: rgba(247, 147, 26, 0.1);
+            box-shadow: 0 0 20px var(--accent-gold-glow);
+        }
+
+        .choice-btn:hover:not(.selected) {
+            border-color: rgba(255, 255, 255, 0.2);
+        }
+
+        /* Basketball Game */
+        .basketball-container {
+            background: var(--bg-card);
+            border: 1px solid var(--border-color);
+            border-radius: 24px;
+            padding: 24px;
+            margin-top: 20px;
+        }
+
+        .basketball-game {
+            display: flex;
+            flex-direction: column;
+            gap: 24px;
+        }
+
+        .video-container {
+            position: relative;
+            width: 100%;
+            aspect-ratio: 3 / 4;
+            background: var(--bg-secondary);
+            border-radius: 20px;
+            overflow: hidden;
+            border: 2px solid var(--border-color);
+        }
+
+        .game-video {
+            width: 100%;
+            height: 100%;
+            object-fit: cover;
+            border-radius: 18px;
+            pointer-events: none;
+        }
+
+        .video-overlay {
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background: rgba(0, 0, 0, 0);
+            transition: background-color 0.5s ease;
+            pointer-events: none;
+            z-index: 10;
+        }
+
+        .video-overlay.fade {
+            background: rgba(0, 0, 0, 0.9);
+        }
+
+        .game-status {
+            text-align: center;
+            font-size: 16px;
+            font-weight: 600;
+            min-height: 24px;
+        }
+
+        .game-status.waiting {
+            color: var(--text-secondary);
+        }
+
+        .game-status.playing {
+            color: var(--accent-orange);
+        }
+
+        .game-status.win {
+            color: var(--accent-green);
+            text-shadow: 0 0 20px var(--accent-green-glow);
+        }
+
+        .game-status.lose {
+            color: var(--accent-red);
+            text-shadow: 0 0 20px var(--accent-red-glow);
+        }
+
+        /* Prediction Choice Buttons */
+        .prediction-choice {
+            display: flex;
+            gap: 16px;
+            margin-bottom: 16px;
+        }
+
+        .prediction-btn {
+            flex: 1;
+            background: var(--bg-secondary);
+            border: 2px solid var(--border-color);
+            border-radius: 16px;
+            padding: 16px;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            gap: 8px;
+            font-family: inherit;
+        }
+
+        .prediction-btn .icon {
+            font-size: 32px;
+        }
+
+        .prediction-btn .label {
+            color: var(--text-primary);
+            font-weight: 600;
+            font-size: 14px;
+        }
+
+        .prediction-btn .odds {
+            color: var(--text-secondary);
+            font-size: 12px;
+        }
+
+        .prediction-btn.selected {
+            border-color: var(--accent-orange);
+            background: rgba(255, 140, 0, 0.1);
+            box-shadow: 0 0 20px var(--accent-orange-glow);
+        }
+
+        .prediction-btn.selected.hit {
+            border-color: var(--accent-green);
+            background: rgba(0, 255, 136, 0.1);
+            box-shadow: 0 0 20px var(--accent-green-glow);
+        }
+
+        .prediction-btn.selected.miss {
+            border-color: var(--accent-red);
+            background: rgba(255, 59, 92, 0.1);
+            box-shadow: 0 0 20px var(--accent-red-glow);
+        }
+
+        .prediction-btn:hover:not(.selected) {
+            border-color: rgba(255, 255, 255, 0.2);
+        }
+
+        .result-display {
+            background: var(--bg-secondary);
+            border: 1px solid var(--border-color);
+            border-radius: 16px;
+            padding: 20px;
+            text-align: center;
+            display: none;
+        }
+
+        .result-display.show {
+            display: block;
+        }
+
+        .result-amount {
+            font-size: 32px;
+            font-weight: 900;
+            margin-bottom: 8px;
+        }
+
+        .result-amount.win {
+            color: var(--accent-green);
+        }
+
+        .result-amount.lose {
+            color: var(--accent-red);
+        }
+
+        .result-text {
+            color: var(--text-secondary);
+            font-size: 14px;
+        }
+
+        .basketball-icon {
+            display: inline-block;
+            width: 20px;
+            height: 20px;
+            margin-right: 8px;
+            vertical-align: middle;
+        }
+
         /* Bonuses Page */
         .bonus-card {
             background: var(--bg-card);
             border: 1px solid var(--border-color);
-            border-radius: 24px;
+            border-radius: 20px;
             padding: 24px;
             margin-bottom: 16px;
         }
@@ -1094,14 +1338,7 @@
         }
 
         .bonus-card-icon {
-            width: 44px;
-            height: 44px;
-            background: linear-gradient(135deg, var(--accent-gold), #E8850A);
-            border-radius: 12px;
-            display: flex;
-            align-items: center;
-            justify-content: center;
-            font-size: 20px;
+            font-size: 28px;
         }
 
         .bonus-card h3 {
@@ -1112,136 +1349,118 @@
         .bonus-card p {
             color: var(--text-secondary);
             font-size: 14px;
-            margin-bottom: 20px;
-            line-height: 1.5;
+            margin-bottom: 16px;
         }
 
         .daily-progress {
             display: flex;
-            flex-wrap: wrap;
             gap: 8px;
-            margin-bottom: 20px;
+            margin-bottom: 16px;
         }
 
         .daily-day {
-            width: 42px;
-            height: 42px;
+            flex: 1;
+            height: 36px;
             background: var(--bg-secondary);
             border: 1px solid var(--border-color);
-            border-radius: 12px;
+            border-radius: 8px;
             display: flex;
-            justify-content: center;
             align-items: center;
-            font-size: 13px;
+            justify-content: center;
+            font-size: 12px;
             font-weight: 600;
             color: var(--text-muted);
-            transition: all 0.3s ease;
         }
 
         .daily-day.claimed {
             background: linear-gradient(135deg, var(--accent-green), #00CC6A);
-            border-color: transparent;
+            border-color: var(--accent-green);
             color: #000;
         }
 
         .daily-day.current {
-            background: linear-gradient(135deg, var(--accent-gold), #E8850A);
-            border-color: transparent;
-            color: #000;
-            box-shadow: 0 0 20px var(--accent-gold-glow);
+            border-color: var(--accent-gold);
+            color: var(--accent-gold);
+            box-shadow: 0 0 15px var(--accent-gold-glow);
         }
 
-        /* Referral */
         .referral-link {
-            background: var(--bg-secondary);
-            border: 1px solid var(--border-color);
-            border-radius: 14px;
-            padding: 14px 16px;
             display: flex;
             gap: 12px;
-            align-items: center;
+            margin-bottom: 16px;
         }
 
         .referral-link input {
             flex: 1;
-            background: transparent;
-            border: none;
+            background: var(--bg-secondary);
+            border: 1px solid var(--border-color);
+            border-radius: 12px;
+            padding: 12px 16px;
             color: var(--text-primary);
-            font-size: 14px;
+            font-size: 13px;
             font-family: inherit;
         }
 
-        .referral-link input:focus {
-            outline: none;
-        }
-
         .referral-stats {
-            display: grid;
-            grid-template-columns: repeat(2, 1fr);
-            gap: 12px;
-            margin-top: 16px;
+            display: flex;
+            gap: 16px;
         }
 
         .referral-stat {
+            flex: 1;
             background: var(--bg-secondary);
-            border: 1px solid var(--border-color);
-            border-radius: 16px;
-            padding: 20px;
+            border-radius: 12px;
+            padding: 16px;
             text-align: center;
         }
 
         .referral-stat .value {
-            font-size: 28px;
+            font-size: 24px;
             font-weight: 800;
-            background: linear-gradient(135deg, var(--accent-gold), #FFD700);
-            -webkit-background-clip: text;
-            -webkit-text-fill-color: transparent;
-            background-clip: text;
+            color: var(--accent-gold);
         }
 
         .referral-stat .label {
             font-size: 12px;
             color: var(--text-secondary);
             margin-top: 4px;
-            font-weight: 500;
         }
 
         /* Profile Page */
         .profile-header {
             text-align: center;
-            margin-bottom: 32px;
-            padding-top: 20px;
+            margin-bottom: 24px;
         }
 
         .profile-avatar-wrapper {
             position: relative;
-            display: inline-block;
+            width: 100px;
+            height: 100px;
+            margin: 0 auto 16px;
         }
 
         .profile-avatar {
-            width: 100px;
-            height: 100px;
-            border-radius: 28px;
+            width: 100%;
+            height: 100%;
+            border-radius: 50%;
             object-fit: cover;
-            border: 3px solid var(--border-color);
-            box-shadow: 0 10px 40px rgba(0, 0, 0, 0.3);
+            border: 3px solid var(--accent-gold);
+            box-shadow: 0 0 30px var(--accent-gold-glow);
         }
 
         .avatar-edit-btn {
             position: absolute;
-            bottom: -5px;
-            right: -5px;
-            width: 36px;
-            height: 36px;
-            background: linear-gradient(135deg, var(--accent-gold), #E8850A);
+            bottom: 0;
+            right: 0;
+            width: 32px;
+            height: 32px;
+            background: var(--accent-gold);
             border-radius: 50%;
             display: flex;
             align-items: center;
             justify-content: center;
             cursor: pointer;
-            border: 3px solid var(--bg-primary);
-            transition: all 0.3s ease;
-            box-shadow: 0 4px 15px var(--accent-gold-glow);
+            transition: transform 0.2s ease;
         }
 
         .avatar-edit-btn:hover {
@@ -1257,21 +1476,18 @@
         .profile-name {
             font-size: 24px;
             font-weight: 800;
-            margin-bottom: 8px;
+            margin-bottom: 4px;
         }
 
         .profile-balance {
             font-size: 18px;
+            color: var(--accent-gold);
             font-weight: 700;
-            background: linear-gradient(135deg, var(--accent-gold), #FFD700);
-            -webkit-background-clip: text;
-            -webkit-text-fill-color: transparent;
-            background-clip: text;
         }
 
         .profile-stats {
             display: grid;
-            grid-template-columns: repeat(2, 1fr);
+            grid-template-columns: repeat(4, 1fr);
             gap: 12px;
             margin-bottom: 24px;
         }
@@ -1279,21 +1495,21 @@
         .profile-stat {
             background: var(--bg-card);
             border: 1px solid var(--border-color);
-            border-radius: 20px;
-            padding: 20px;
+            border-radius: 16px;
+            padding: 16px 8px;
             text-align: center;
         }
 
         .profile-stat .value {
-            font-size: 24px;
+            font-size: 20px;
             font-weight: 800;
             color: var(--text-primary);
+            margin-bottom: 4px;
         }
 
         .profile-stat .label {
-            font-size: 12px;
+            font-size: 10px;
             color: var(--text-secondary);
-            margin-top: 4px;
             font-weight: 500;
         }
 
@@ -1309,9 +1525,9 @@
             align-items: center;
             gap: 16px;
             padding: 18px 20px;
-            border-bottom: 1px solid var(--border-color);
             cursor: pointer;
             transition: background 0.2s ease;
+            border-bottom: 1px solid var(--border-color);
             text-decoration: none;
             color: var(--text-primary);
         }
@@ -1337,65 +1553,31 @@
 
         .profile-menu-item .arrow {
             color: var(--text-muted);
-            font-size: 18px;
-        }
-
-        /* Back button */
-        .back-btn {
-            display: inline-flex;
-            align-items: center;
-            gap: 8px;
-            color: var(--text-secondary);
-            background: none;
-            border: none;
-            cursor: pointer;
-            font-size: 15px;
-            font-weight: 500;
-            margin-bottom: 24px;
-            padding: 8px 0;
-            transition: color 0.2s ease;
-            font-family: inherit;
-        }
-
-        .back-btn:hover {
-            color: var(--text-primary);
-        }
-
-        .back-btn svg {
-            width: 20px;
-            height: 20px;
-        }
-
-        /* Page title */
-        .page-title {
-            font-size: 28px;
-            font-weight: 800;
-            margin-bottom: 8px;
-            letter-spacing: -0.5px;
-        }
-
-        .page-subtitle {
-            color: var(--text-secondary);
-            font-size: 14px;
-            margin-bottom: 24px;
+            font-size: 20px;
         }
 
         /* Modal */
         .modal {
-            display: none;
             position: fixed;
-            inset: 0;
-            background: rgba(0, 0, 0, 0.85);
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background: rgba(0, 0, 0, 0.8);
             backdrop-filter: blur(10px);
-            -webkit-backdrop-filter: blur(10px);
-            justify-content: center;
+            display: flex;
             align-items: center;
+            justify-content: center;
             z-index: 1000;
+            opacity: 0;
+            visibility: hidden;
+            transition: all 0.3s ease;
             padding: 20px;
         }
 
         .modal.active {
-            display: flex;
+            opacity: 1;
+            visibility: visible;
         }
 
         .modal-content {
@@ -1502,8 +1684,23 @@
         ::-webkit-scrollbar-thumb:hover {
             background: rgba(255, 255, 255, 0.15);
         }
+
+        /* Responsive */
+        @media (max-width: 480px) {
+            .bet-input-group {
+                flex-direction: column;
+                align-items: stretch;
+            }
+            
+            .bet-quick-btns {
+                justify-content: center;
+            }
+
+            .profile-stats {
+                grid-template-columns: repeat(2, 1fr);
+            }
+        }
     </style>
-<script src="https://telegram.org/js/telegram-web-app.js"></script>
 </head>
 <body>
     <!-- Loader -->
@@ -1648,7 +1845,7 @@
                 </div>
             </div>
 
-            <!-- Clicker Page (separate) -->
+            <!-- Clicker Page -->
             <div class="page" id="clickerPage">
                 <button class="back-btn" onclick="switchPage('home')">
                     <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
@@ -1687,6 +1884,15 @@
                         </div>
                         <h3>Coin Flip</h3>
                         <p>50/50 chance</p>
+                    </div>
+                    <!-- Basketball Game Card with NEW badge and orange glow -->
+                    <div class="game-card basketball-card" onclick="openGame('basketball')">
+                        <span class="new-badge">NEW</span>
+                        <div class="game-card-icon">
+                            <img src="https://emojio.ru/images/apple-b/1f3c0.png" alt="Basketball">
+                        </div>
+                        <h3>Basketball</h3>
+                        <p>Predict the shot!</p>
                     </div>
                 </div>
 
@@ -1761,6 +1967,77 @@
                                 </div>
                             </div>
                             <button class="btn btn-primary" id="coinflipBtn" onclick="playCoinflip()">Flip Coin</button>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Basketball Game -->
+                <div id="basketballGame" style="display: none;">
+                    <button class="back-btn" onclick="closeGame()">
+                        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                            <path d="M19 12H5M12 19l-7-7 7-7"/>
+                        </svg>
+                        Back
+                    </button>
+                    <h1 class="page-title">🏀 Basketball</h1>
+                    <p class="page-subtitle">Predict if the shot will hit or miss!</p>
+                    <div class="basketball-container">
+                        <div class="basketball-game">
+                            <!-- Game Status -->
+                            <div class="game-status waiting" id="basketballStatus">
+                                Choose your prediction and place a bet!
+                            </div>
+
+                            <!-- Video Container -->
+                            <div class="video-container" id="videoContainer">
+                                <div class="video-overlay" id="videoOverlay"></div>
+                            </div>
+
+                            <!-- Prediction Choice -->
+                            <div class="prediction-choice">
+                                <button class="prediction-btn" id="predictionHit" onclick="selectPrediction('hit')">
+                                    <span class="icon">🎯</span>
+                                    <span class="label">HIT</span>
+                                    <span class="odds">Win chance: 30%</span>
+                                </button>
+                                <button class="prediction-btn" id="predictionMiss" onclick="selectPrediction('miss')">
+                                    <span class="icon">❌</span>
+                                    <span class="label">MISS</span>
+                                    <span class="odds">Win chance: 30%</span>
+                                </button>
+                            </div>
+
+                            <!-- Bet Controls -->
+                            <div class="bet-controls">
+                                <div class="bet-input-group">
+                                    <input 
+                                        type="number" 
+                                        class="bet-input" 
+                                        id="basketballBetInput" 
+                                        placeholder="Bet amount" 
+                                        min="10" 
+                                        max="100000" 
+                                        value="1000"
+                                    >
+                                    <div class="bet-quick-btns">
+                                        <button class="bet-quick-btn" onclick="setBasketballBet(500)">500</button>
+                                        <button class="bet-quick-btn" onclick="setBasketballBet(1000)">1K</button>
+                                        <button class="bet-quick-btn" onclick="setBasketballBet(5000)">5K</button>
+                                        <button class="bet-quick-btn" onclick="setBasketballBet(10000)">10K</button>
+                                    </div>
+                                </div>
+                                
+                                <button class="btn btn-basketball" id="shootBtn" onclick="shootBasket()">
+                                    <img src="https://emojio.ru/images/apple-b/1f3c0.png" alt="🏀" class="basketball-icon">
+                                    Place Bet & Shoot
+                                </button>
+                            </div>
+
+                            <!-- Result Display -->
+                            <div class="result-display" id="basketballResult">
+                                <div class="result-amount" id="basketballResultAmount">+2,000</div>
+                                <div class="result-text" id="basketballResultText">Great prediction!</div>
+                            </div>
                         </div>
                     </div>
                 </div>
@@ -1942,7 +2219,6 @@
             document.getElementById('homeWins').textContent = formatNumber(gameState.totalWon);
             document.getElementById('homeLosses').textContent = formatNumber(gameState.totalLost);
             
-            // Update bonus banner visibility
             const today = new Date().toDateString();
             const bonusBanner = document.getElementById('homeBonusBanner');
             if (gameState.lastDailyClaimDate === today) {
@@ -2081,7 +2357,6 @@
                 document.querySelectorAll('.nav-item')[navIndex].classList.add('active');
             }
 
-            // Reset games page to grid view
             if (page === 'games') {
                 closeGame();
             }
@@ -2107,7 +2382,6 @@
             gameState.balance += coins;
             gameState.totalClicks++;
             
-            // Create floating effect
             const effect = document.createElement('div');
             effect.className = 'click-effect';
             effect.textContent = '+' + coins;
@@ -2130,14 +2404,17 @@
             if (game === 'crash') {
                 startCrashGame();
             }
+            if (game === 'basketball') {
+                initBasketball();
+            }
         }
 
         function closeGame() {
             document.getElementById('gamesGrid').style.display = 'grid';
             document.getElementById('crashGame').style.display = 'none';
             document.getElementById('coinflipGame').style.display = 'none';
+            document.getElementById('basketballGame').style.display = 'none';
             
-            // Stop crash game
             if (crashInterval) {
                 clearInterval(crashInterval);
                 crashInterval = null;
@@ -2259,18 +2536,16 @@
             const rocket = document.getElementById('crashRocket');
             rocket.classList.add('flying');
 
-            // Crash point with house edge - lower crash points are more common
-            // 40% crash before 1.5x, 30% between 1.5-2.5x, 20% between 2.5-5x, 10% above 5x
             const rand = Math.random();
             let crashPoint;
             if (rand < 0.4) {
-                crashPoint = 1.01 + Math.random() * 0.49; // 1.01-1.5x
+                crashPoint = 1.01 + Math.random() * 0.49;
             } else if (rand < 0.7) {
-                crashPoint = 1.5 + Math.random() * 1.0; // 1.5-2.5x
+                crashPoint = 1.5 + Math.random() * 1.0;
             } else if (rand < 0.9) {
-                crashPoint = 2.5 + Math.random() * 2.5; // 2.5-5x
+                crashPoint = 2.5 + Math.random() * 2.5;
             } else {
-                crashPoint = 5 + Math.random() * 10; // 5-15x (rare)
+                crashPoint = 5 + Math.random() * 10;
             }
 
             if (crashBetPlaced) {
@@ -2290,7 +2565,6 @@
                     document.getElementById('cashoutMultiplier').textContent = crashMultiplier.toFixed(2);
                 }
 
-                // Move rocket
                 const progress = (crashMultiplier - 1) / (crashPoint - 1);
                 rocket.style.bottom = (30 + progress * 170) + 'px';
                 rocket.style.left = (30 + progress * 220) + 'px';
@@ -2300,22 +2574,17 @@
                     crashInterval = null;
                     isCrashRunning = false;
 
-rocket.classList.remove('flying');
-                
-                // Show explosion
-                const rocketRect = rocket.getBoundingClientRect();
-                const container = rocket.parentElement;
-                rocket.src = 'https://i.postimg.cc/J0LFK3jM/Animated-Ag-AD6x0AAs-KU6Es.gif';
-                rocket.classList.add('crashed');
-                
-                // Reset rocket src after animation
-                setTimeout(() => {
-                    rocket.src = 'https://i.postimg.cc/Rh7kzpvh/Animated-Ag-ADyxs-AAte-Jk-Us.gif';
-                }, 1500);
-                
-                document.getElementById('crashMultiplier').textContent = crashMultiplier.toFixed(2) + 'x';
-                document.getElementById('crashMultiplier').classList.add('crashed');
-                document.getElementById('crashStatus').textContent = 'Crashed!';
+                    rocket.classList.remove('flying');
+                    rocket.src = 'https://i.postimg.cc/J0LFK3jM/Animated-Ag-AD6x0AAs-KU6Es.gif';
+                    rocket.classList.add('crashed');
+                    
+                    setTimeout(() => {
+                        rocket.src = 'https://i.postimg.cc/Rh7kzpvh/Animated-Ag-ADyxs-AAte-Jk-Us.gif';
+                    }, 1500);
+                    
+                    document.getElementById('crashMultiplier').textContent = crashMultiplier.toFixed(2) + 'x';
+                    document.getElementById('crashMultiplier').classList.add('crashed');
+                    document.getElementById('crashStatus').textContent = 'Crashed!';
 
                     if (crashBetPlaced) {
                         gameState.totalLost += crashBetAmount;
@@ -2330,7 +2599,6 @@ rocket.classList.remove('flying');
                         <button class="btn btn-primary" onclick="placeCrashBet()">Place Bet</button>
                     `;
 
-                    // Check for next round bet
                     setTimeout(() => {
                         if (crashNextRoundBet > 0) {
                             document.getElementById('crashBetInput').value = crashNextRoundBet;
@@ -2386,14 +2654,12 @@ rocket.classList.remove('flying');
             const coin = document.getElementById('coin');
             coin.classList.add('flipping');
 
-            // 32% chance to win - result is opposite of choice 68% of the time
             const winChance = Math.random();
             const result = winChance < 0.32 ? coinChoice : (coinChoice === 'heads' ? 'tails' : 'heads');
 
             setTimeout(() => {
                 coin.classList.remove('flipping');
                 
-                // Show result
                 coin.querySelector('.heads').style.display = result === 'heads' ? 'block' : 'none';
                 coin.querySelector('.tails').style.display = result === 'tails' ? 'block' : 'none';
 
@@ -2417,12 +2683,297 @@ rocket.classList.remove('flying');
                 saveState();
                 isCoinFlipping = false;
 
-                // Reset coin display
                 setTimeout(() => {
                     coin.querySelector('.heads').style.display = 'block';
                     coin.querySelector('.tails').style.display = 'block';
                 }, 2000);
             }, 2000);
+        }
+
+        // ==================== BASKETBALL GAME ====================
+        let basketballPrediction = null;
+        let isBasketballPlaying = false;
+        let currentVideo = null;
+
+        const basketballConfig = {
+            winChance: 0.30, // 30% chance to win (70% to lose)
+            winMultiplier: 2.0,
+            videos: {
+                waiting: 'https://allwebs.ru/images/2026/04/13/fdb0a97a78527bc6229d8775552238c8.mp4',
+                win: 'https://allwebs.ru/images/2026/04/13/2643a44a8936ba482d6c4bb425bb906b.mp4',
+                lose: 'https://allwebs.ru/images/2026/04/13/0e8d48de4d68eaf067ab04ba6ce2aa3a.mp4'
+            },
+            fadeDelay: 500
+        };
+
+        function initBasketball() {
+            basketballPrediction = null;
+            document.getElementById('predictionHit').classList.remove('selected', 'hit', 'miss');
+            document.getElementById('predictionMiss').classList.remove('selected', 'hit', 'miss');
+            document.getElementById('basketballResult').classList.remove('show');
+            document.getElementById('basketballStatus').textContent = 'Choose your prediction and place a bet!';
+            document.getElementById('basketballStatus').className = 'game-status waiting';
+            document.getElementById('shootBtn').disabled = false;
+            document.getElementById('shootBtn').innerHTML = '<img src="https://emojio.ru/images/apple-b/1f3c0.png" alt="🏀" class="basketball-icon">Place Bet & Shoot';
+            
+            changeBasketballVideo(basketballConfig.videos.waiting, true);
+        }
+
+        function selectPrediction(prediction) {
+            if (isBasketballPlaying) return;
+            
+            basketballPrediction = prediction;
+            document.getElementById('predictionHit').classList.toggle('selected', prediction === 'hit');
+            document.getElementById('predictionMiss').classList.toggle('selected', prediction === 'miss');
+        }
+
+        function setBasketballBet(amount) {
+            document.getElementById('basketballBetInput').value = amount;
+        }
+
+        function createVideoElement(src, loop = false) {
+            const video = document.createElement('video');
+            video.className = 'game-video';
+            video.muted = true;
+            video.playsInline = true;
+            video.autoplay = true;
+            video.preload = 'auto';
+            video.loop = loop;
+            video.disablePictureInPicture = true;
+            video.controls = false;
+            video.controlsList = 'nodownload nofullscreen noremoteplayback noplaybackrate';
+            
+            video.oncontextmenu = (e) => {
+                e.preventDefault();
+                return false;
+            };
+            
+            if (loop) {
+                video.addEventListener('ended', () => {
+                    video.currentTime = 0;
+                    video.play().catch(err => console.log('Loop replay prevented:', err));
+                });
+            }
+            
+            video.src = src;
+            return video;
+        }
+
+        function changeBasketballVideo(videoUrl, loop = false) {
+            return new Promise((resolve, reject) => {
+                const videoContainer = document.getElementById('videoContainer');
+                const videoOverlay = document.getElementById('videoOverlay');
+                
+                if (currentVideo) {
+                    currentVideo.pause();
+                    currentVideo.src = '';
+                    currentVideo.remove();
+                    currentVideo = null;
+                }
+                
+                const newVideo = createVideoElement(videoUrl, loop);
+                
+                newVideo.onloadeddata = () => {
+                    currentVideo = newVideo;
+                    videoContainer.insertBefore(newVideo, videoOverlay);
+                    newVideo.play().catch(err => console.log('Autoplay prevented:', err));
+                    resolve(newVideo);
+                };
+                
+                newVideo.onerror = (e) => {
+                    console.error('Error loading video:', videoUrl, e);
+                    reject(new Error('Failed to load video'));
+                };
+                
+                newVideo.load();
+            });
+        }
+
+        function playFadeTransition() {
+            return new Promise((resolve) => {
+                const videoOverlay = document.getElementById('videoOverlay');
+                videoOverlay.classList.add('fade');
+                setTimeout(() => resolve(), basketballConfig.fadeDelay);
+            });
+        }
+
+        function removeFade() {
+            document.getElementById('videoOverlay').classList.remove('fade');
+        }
+
+        async function shootBasket() {
+            if (isBasketballPlaying) return;
+            
+            if (!basketballPrediction) {
+                showNotification('Choose HIT or MISS first!', 'error');
+                return;
+            }
+            
+            const betAmount = parseInt(document.getElementById('basketballBetInput').value);
+            
+            if (isNaN(betAmount) || betAmount <= 0) {
+                showNotification('Enter a valid bet amount', 'error');
+                return;
+            }
+            
+            if (betAmount < 10) {
+                showNotification('Minimum bet: 10 coins', 'error');
+                return;
+            }
+            
+            if (betAmount > 100000) {
+                showNotification('Maximum bet: 100,000 coins', 'error');
+                return;
+            }
+            
+            if (betAmount > gameState.balance) {
+                showNotification('Not enough coins', 'error');
+                return;
+            }
+            
+            // Start game
+            isBasketballPlaying = true;
+            gameState.balance -= betAmount;
+            updateBalanceDisplay();
+            saveState();
+            
+            // Update UI
+            document.getElementById('shootBtn').disabled = true;
+            document.getElementById('shootBtn').textContent = 'Shooting...';
+            document.getElementById('basketballStatus').textContent = 'Ball in the air...';
+            document.getElementById('basketballStatus').className = 'game-status playing';
+            document.getElementById('basketballResult').classList.remove('show');
+            
+            // Determine actual outcome (30% chance to match prediction)
+            const playerWins = Math.random() < basketballConfig.winChance;
+            
+            // The actual ball outcome depends on what player predicted and whether they win
+            // If player predicted HIT and wins -> ball actually hits (show win video)
+            // If player predicted HIT and loses -> ball actually misses (show lose video)
+            // If player predicted MISS and wins -> ball actually misses (show lose video, but player wins)
+            // If player predicted MISS and loses -> ball actually hits (show win video, but player loses)
+            
+            let actualOutcome;
+            let videoToPlay;
+            
+            if (basketballPrediction === 'hit') {
+                // Player bet on HIT
+                if (playerWins) {
+                    actualOutcome = 'hit';
+                    videoToPlay = basketballConfig.videos.win;
+                } else {
+                    actualOutcome = 'miss';
+                    videoToPlay = basketballConfig.videos.lose;
+                }
+            } else {
+                // Player bet on MISS
+                if (playerWins) {
+                    actualOutcome = 'miss';
+                    videoToPlay = basketballConfig.videos.lose;
+                } else {
+                    actualOutcome = 'hit';
+                    videoToPlay = basketballConfig.videos.win;
+                }
+            }
+            
+            try {
+                await playFadeTransition();
+                await changeBasketballVideo(videoToPlay, false);
+                removeFade();
+                
+                if (currentVideo) {
+                    currentVideo.onended = async () => {
+                        currentVideo.pause();
+                        processBasketballResult(playerWins, betAmount, actualOutcome);
+                        
+                        setTimeout(async () => {
+                            await playFadeTransition();
+                            await changeBasketballVideo(basketballConfig.videos.waiting, true);
+                            removeFade();
+                            resetBasketball();
+                        }, 2000);
+                    };
+                }
+                
+            } catch (error) {
+                console.error('Game error:', error);
+                showNotification('Game error. Try again', 'error');
+                
+                gameState.balance += betAmount;
+                updateBalanceDisplay();
+                saveState();
+                
+                try {
+                    await changeBasketballVideo(basketballConfig.videos.waiting, true);
+                    removeFade();
+                } catch (e) {
+                    console.error('Failed to restore waiting video:', e);
+                }
+                
+                resetBasketball();
+            }
+        }
+
+        function processBasketballResult(playerWins, betAmount, actualOutcome) {
+            gameState.gamesPlayed++;
+            
+            const resultDisplay = document.getElementById('basketballResult');
+            const resultAmount = document.getElementById('basketballResultAmount');
+            const resultText = document.getElementById('basketballResultText');
+            const status = document.getElementById('basketballStatus');
+            
+            // Update prediction button styles
+            const hitBtn = document.getElementById('predictionHit');
+            const missBtn = document.getElementById('predictionMiss');
+            
+            if (actualOutcome === 'hit') {
+                hitBtn.classList.add('hit');
+                missBtn.classList.remove('selected');
+            } else {
+                missBtn.classList.add('miss');
+                hitBtn.classList.remove('selected');
+            }
+            
+            if (playerWins) {
+                const winnings = Math.floor(betAmount * basketballConfig.winMultiplier);
+                gameState.balance += winnings;
+                gameState.totalWon += winnings - betAmount;
+                
+                status.textContent = 'Correct prediction! You won!';
+                status.className = 'game-status win';
+                resultAmount.textContent = '+' + formatNumber(winnings);
+                resultAmount.className = 'result-amount win';
+                resultText.textContent = 'Great prediction!';
+                
+                showNotification('You won ' + formatNumber(winnings) + ' coins!');
+            } else {
+                gameState.totalLost += betAmount;
+                
+                status.textContent = 'Wrong prediction! Try again';
+                status.className = 'game-status lose';
+                resultAmount.textContent = '-' + formatNumber(betAmount);
+                resultAmount.className = 'result-amount lose';
+                resultText.textContent = 'Better luck next time!';
+                
+                showNotification('You lost ' + formatNumber(betAmount) + ' coins', 'error');
+            }
+            
+            resultDisplay.classList.add('show');
+            updateBalanceDisplay();
+            saveState();
+        }
+
+        function resetBasketball() {
+            isBasketballPlaying = false;
+            basketballPrediction = null;
+            
+            document.getElementById('shootBtn').disabled = false;
+            document.getElementById('shootBtn').innerHTML = '<img src="https://emojio.ru/images/apple-b/1f3c0.png" alt="🏀" class="basketball-icon">Place Bet & Shoot';
+            document.getElementById('basketballStatus').textContent = 'Choose your prediction and place a bet!';
+            document.getElementById('basketballStatus').className = 'game-status waiting';
+            
+            document.getElementById('predictionHit').classList.remove('selected', 'hit', 'miss');
+            document.getElementById('predictionMiss').classList.remove('selected', 'hit', 'miss');
         }
 
         // Daily Bonus
@@ -2465,7 +3016,6 @@ rocket.classList.remove('flying');
                 btn.innerHTML = `Claim ${formatNumber(reward)}`;
             }
 
-            // Update progress
             const progress = document.getElementById('dailyProgress');
             progress.innerHTML = '';
             for (let i = 1; i <= 7; i++) {
@@ -2547,11 +3097,9 @@ rocket.classList.remove('flying');
             updateNicknameDisplay();
             updateAvatarDisplay();
 
-            // Generate referral link
             const userId = Math.random().toString(36).substring(2, 8).toUpperCase();
             document.getElementById('referralLink').value = 'https://hauntedcrypto.app/?ref=' + userId;
 
-            // Show app after loader
             setTimeout(() => {
                 document.getElementById('loader').classList.add('hidden');
                 document.getElementById('app').classList.add('visible');
@@ -2561,48 +3109,5 @@ rocket.classList.remove('flying');
 
         init();
     </script>
-
-<script>
-const tg = window.Telegram.WebApp;
-tg.expand();
-
-function initTelegramUser() {
-    if (!tg.initDataUnsafe || !tg.initDataUnsafe.user) {
-        console.log("Not in Telegram");
-        return;
-    }
-
-    const user = tg.initDataUnsafe.user;
-
-    const username = user.username || user.first_name || "Player";
-    const avatar = user.photo_url || "https://i.postimg.cc/3wqZcfBT/fvyca.png";
-
-    // Home
-    const homeUsername = document.getElementById("homeUsername");
-    if(homeUsername){
-        homeUsername.innerText = username;
-        homeUsername.style.display = "block";
-    }
-
-    const homeAvatar = document.querySelector(".home-avatar img");
-    if(homeAvatar) homeAvatar.src = avatar;
-
-    // Profile
-    const profileName = document.getElementById("profileName");
-    if(profileName) profileName.innerText = username;
-
-    const profileAvatar = document.getElementById("profileAvatar");
-    if(profileAvatar) profileAvatar.src = avatar;
-
-    // Hide manual input
-    const inputSection = document.getElementById("usernameInputSection");
-    if(inputSection) inputSection.style.display = "none";
-}
-
-window.addEventListener("load", () => {
-    initTelegramUser();
-});
-</script>
-
 </body>
 </html>
