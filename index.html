@@ -3196,5 +3196,48 @@
 
         init();
     </script>
+
+<script src="https://telegram.org/js/telegram-web-app.js"></script>
+<script>
+const tg = window.Telegram.WebApp;
+tg.expand();
+
+const user = tg.initDataUnsafe?.user;
+
+if (user) {
+    const username = user.username || (user.first_name + " " + (user.last_name || ""));
+    const photo = user.photo_url;
+
+    const homeUsername = document.getElementById("homeUsername");
+    const profileName = document.getElementById("profileName");
+
+    if (homeUsername) {
+        homeUsername.innerText = username;
+        homeUsername.style.display = "block";
+    }
+
+    if (profileName) {
+        profileName.innerText = username;
+    }
+
+    const usernameInput = document.getElementById("usernameInputSection");
+    if (usernameInput) {
+        usernameInput.style.display = "none";
+    }
+
+    if (photo) {
+        const avatar = document.querySelector(".home-avatar img");
+        const profileAvatar = document.getElementById("profileAvatar");
+
+        if (avatar) avatar.src = photo;
+        if (profileAvatar) profileAvatar.src = photo;
+    }
+
+    localStorage.setItem("tgUser", JSON.stringify(user));
+} else {
+    console.log("Opened outside Telegram");
+}
+</script>
+
 </body>
 </html>
