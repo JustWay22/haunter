@@ -3,10 +3,11 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=no, viewport-fit=cover">
-    <title>HAUNTER - Basketball Game</title>
+    <title>HAUNTER - TON Games</title>
     <link rel="preconnect" href="https://fonts.googleapis.com">
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
     <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800;900&display=swap" rel="stylesheet">
+    <script src="https://cdn.jsdelivr.net/npm/qrcodejs@1.0.0/qrcode.min.js"></script>
     <style>
         * {
             margin: 0;
@@ -29,8 +30,8 @@
             --accent-green: #34C759;
             --accent-red: #FF3B30;
             --tab-active: #FF6B00;
-            --tab-inactive: #8E8E93;
             --glass-bg: rgba(255, 255, 255, 0.7);
+            --ton-blue: #0098EA;
         }
 
         body.dark {
@@ -42,7 +43,6 @@
             --text-primary: #ffffff;
             --text-secondary: rgba(255, 255, 255, 0.55);
             --text-muted: rgba(255, 255, 255, 0.3);
-            --tab-inactive: #8E8E93;
             --glass-bg: rgba(28, 28, 30, 0.7);
         }
 
@@ -52,24 +52,12 @@
             color: var(--text-primary);
             min-height: 100vh;
             overflow-x: hidden;
-            -webkit-font-smoothing: antialiased;
         }
 
-        /* Content */
         .content {
             padding: 20px 16px 100px 16px;
             max-width: 600px;
             margin: 0 auto;
-        }
-
-        /* iOS 26 Style Glass Morphism Card */
-        .glass-card {
-            background: var(--glass-bg);
-            backdrop-filter: blur(20px);
-            -webkit-backdrop-filter: blur(20px);
-            border-radius: 28px;
-            border: 0.5px solid rgba(255, 255, 255, 0.3);
-            box-shadow: 0 8px 32px rgba(0, 0, 0, 0.08);
         }
 
         /* Profile Card */
@@ -85,7 +73,6 @@
             border: 0.5px solid var(--border-color);
         }
 
-        /* Avatar */
         .avatar-container {
             position: relative;
             cursor: pointer;
@@ -98,8 +85,8 @@
             border-radius: 50%;
             background: linear-gradient(135deg, #FF6B00, #FFB347);
             padding: 3px;
-            box-shadow: 0 0 25px rgba(255, 107, 0, 0.4), 0 0 50px rgba(255, 107, 0, 0.2);
-            transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+            box-shadow: 0 0 25px rgba(255, 107, 0, 0.4);
+            transition: all 0.3s;
         }
 
         .avatar-outer-glow:hover {
@@ -136,77 +123,43 @@
             font-size: 12px;
             border: 3px solid var(--bg-primary);
             cursor: pointer;
-            box-shadow: 0 2px 8px rgba(0,0,0,0.2);
         }
 
-        /* Player Info */
-        .player-info {
-            flex: 1;
-        }
+        .player-info { flex: 1; }
+        .player-label { font-size: 13px; color: var(--accent-orange); font-weight: 600; margin-bottom: 6px; }
+        .player-name { font-size: 22px; font-weight: 700; color: var(--text-primary); display: inline-block; cursor: pointer; }
+        .edit-icon { display: inline-block; margin-left: 8px; opacity: 0.5; cursor: pointer; font-size: 14px; }
 
-        .player-label {
-            font-size: 13px;
-            color: var(--accent-orange);
-            font-weight: 600;
-            letter-spacing: 0.5px;
-            margin-bottom: 6px;
-        }
-
-        .player-name {
-            font-size: 22px;
-            font-weight: 700;
-            color: var(--text-primary);
-            background: none;
-            border: none;
-            padding: 0;
-            font-family: inherit;
-            cursor: pointer;
-            display: inline-block;
-        }
-
-        .edit-icon {
-            display: inline-block;
-            margin-left: 8px;
-            opacity: 0.5;
-            cursor: pointer;
-            font-size: 14px;
-        }
-
-        /* Stats Section */
-        .stats-section {
-            display: flex;
-            gap: 12px;
-            align-items: center;
-        }
-
+        .stats-section { display: flex; gap: 12px; align-items: center; }
         .balance-box {
             background: var(--bg-secondary);
             border-radius: 20px;
             padding: 8px 16px;
             text-align: center;
+            display: flex;
+            align-items: center;
+            gap: 8px;
         }
+        .ton-icon { width: 24px; height: 24px; }
+        .balance-label { font-size: 11px; color: var(--text-muted); font-weight: 500; }
+        .balance-amount { font-size: 18px; font-weight: 800; color: var(--accent-orange); }
+        .theme-toggle { background: var(--bg-secondary); border: none; border-radius: 30px; padding: 8px 14px; cursor: pointer; font-size: 20px; }
 
-        .balance-label {
-            font-size: 11px;
-            color: var(--text-muted);
-            font-weight: 500;
-        }
-
-        .balance-amount {
-            font-size: 18px;
-            font-weight: 800;
-            color: var(--accent-orange);
-        }
-
-        .theme-toggle {
+        /* Game Selector */
+        .game-selector { display: flex; gap: 12px; margin-bottom: 16px; justify-content: flex-end; }
+        .game-btn {
             background: var(--bg-secondary);
-            border: none;
+            border: 1px solid var(--border-color);
             border-radius: 30px;
-            padding: 8px 14px;
+            padding: 8px 20px;
+            font-size: 14px;
+            font-weight: 600;
             cursor: pointer;
-            font-size: 20px;
-            transition: all 0.2s;
+            display: flex;
+            align-items: center;
+            gap: 6px;
         }
+        .game-btn.active { background: var(--accent-orange); color: white; border-color: var(--accent-orange); }
 
         /* Game Container */
         .game-container {
@@ -216,7 +169,6 @@
             margin-bottom: 20px;
             border: 0.5px solid var(--border-color);
         }
-
         .video-container {
             position: relative;
             width: 100%;
@@ -228,13 +180,7 @@
             overflow: hidden;
             border: 1px solid var(--border-color);
         }
-
-        .game-video {
-            width: 100%;
-            height: 100%;
-            object-fit: cover;
-        }
-
+        .game-image { width: 100%; height: 100%; object-fit: cover; }
         .video-overlay {
             position: absolute;
             top: 0;
@@ -246,22 +192,10 @@
             pointer-events: none;
             z-index: 10;
         }
+        .video-overlay.fade { background: rgba(0, 0, 0, 0.9); }
 
-        .video-overlay.fade {
-            background: rgba(0, 0, 0, 0.9);
-        }
-
-        /* Bet Controls */
-        .bet-controls {
-            margin-top: 16px;
-        }
-
-        .bet-input-group {
-            display: flex;
-            gap: 10px;
-            margin-bottom: 12px;
-        }
-
+        .bet-controls { margin-top: 16px; }
+        .bet-input-group { display: flex; gap: 10px; margin-bottom: 12px; }
         .bet-input {
             flex: 1;
             background: var(--bg-secondary);
@@ -273,17 +207,7 @@
             font-weight: 600;
             font-family: inherit;
         }
-
-        .bet-input:focus {
-            outline: none;
-            border-color: var(--accent-orange);
-        }
-
-        .bet-quick-btns {
-            display: flex;
-            gap: 8px;
-        }
-
+        .bet-quick-btns { display: flex; gap: 8px; }
         .bet-quick-btn {
             background: var(--bg-secondary);
             border: 1px solid var(--border-color);
@@ -293,13 +217,7 @@
             cursor: pointer;
             font-size: 13px;
             font-weight: 600;
-            transition: all 0.2s;
         }
-
-        .bet-quick-btn:active {
-            transform: scale(0.95);
-        }
-
         .btn-basketball {
             background: linear-gradient(135deg, #FF6B00, #FF8C3A);
             border: none;
@@ -310,27 +228,10 @@
             color: white;
             cursor: pointer;
             width: 100%;
-            transition: all 0.2s;
         }
+        .btn-basketball:disabled { opacity: 0.5; }
 
-        .btn-basketball:active {
-            transform: scale(0.98);
-        }
-
-        .btn-basketball:disabled {
-            opacity: 0.5;
-            transform: none;
-        }
-
-        .game-status {
-            text-align: center;
-            font-size: 14px;
-            font-weight: 600;
-            margin-bottom: 16px;
-            padding: 8px;
-            border-radius: 20px;
-        }
-
+        .game-status { text-align: center; font-size: 14px; font-weight: 600; margin-bottom: 16px; padding: 8px; border-radius: 20px; }
         .result-display {
             background: var(--bg-secondary);
             border-radius: 20px;
@@ -339,20 +240,12 @@
             margin-top: 16px;
             display: none;
         }
-
-        .result-display.show {
-            display: block;
-        }
-
-        .result-amount {
-            font-size: 28px;
-            font-weight: 800;
-        }
-
+        .result-display.show { display: block; }
+        .result-amount { font-size: 28px; font-weight: 800; }
         .result-amount.win { color: #34C759; }
         .result-amount.lose { color: #FF3B30; }
 
-        /* Bottom Navigation Bar - iOS Style */
+        /* Bottom Navigation */
         .bottom-nav {
             position: fixed;
             bottom: 0;
@@ -363,12 +256,10 @@
             align-items: center;
             background: var(--glass-bg);
             backdrop-filter: blur(25px);
-            -webkit-backdrop-filter: blur(25px);
             padding: 10px 20px 28px 20px;
             border-top: 0.5px solid var(--border-color);
             z-index: 100;
         }
-
         .nav-item {
             display: flex;
             flex-direction: column;
@@ -377,48 +268,18 @@
             cursor: pointer;
             padding: 8px 24px;
             border-radius: 30px;
-            transition: all 0.2s cubic-bezier(0.4, 0, 0.2, 1);
         }
+        .nav-item.active { background: var(--accent-orange); }
+        .nav-icon { font-size: 26px; }
+        .nav-label { font-size: 11px; font-weight: 600; }
+        .nav-item.active .nav-label { color: white; }
 
-        .nav-item.active {
-            background: var(--accent-orange);
-        }
+        /* Profile Page */
+        .profile-page { display: none; padding: 20px 16px 100px 16px; max-width: 600px; margin: 0 auto; }
+        .profile-page.show { display: block; }
+        .game-page { display: block; }
+        .game-page.hide { display: none; }
 
-        .nav-icon {
-            font-size: 26px;
-        }
-
-        .nav-label {
-            font-size: 11px;
-            font-weight: 600;
-            letter-spacing: 0.3px;
-        }
-
-        .nav-item.active .nav-label {
-            color: white;
-        }
-
-        /* Profile Page - iOS 26 Style */
-        .profile-page {
-            display: none;
-            padding: 20px 16px 100px 16px;
-            max-width: 600px;
-            margin: 0 auto;
-        }
-
-        .profile-page.show {
-            display: block;
-        }
-
-        .game-page {
-            display: block;
-        }
-
-        .game-page.hide {
-            display: none;
-        }
-
-        /* iOS Cards */
         .ios-card {
             background: var(--bg-card);
             border-radius: 24px;
@@ -426,29 +287,9 @@
             margin-bottom: 16px;
             border: 0.5px solid var(--border-color);
         }
-
-        .card-header {
-            display: flex;
-            justify-content: space-between;
-            align-items: center;
-            margin-bottom: 16px;
-            font-weight: 600;
-            font-size: 17px;
-        }
-
-        .balance-large {
-            font-size: 40px;
-            font-weight: 800;
-            color: var(--accent-orange);
-            margin: 8px 0;
-        }
-
-        .action-buttons {
-            display: flex;
-            gap: 12px;
-            margin-top: 16px;
-        }
-
+        .card-header { display: flex; justify-content: space-between; align-items: center; margin-bottom: 16px; font-weight: 600; font-size: 17px; }
+        .balance-large { font-size: 40px; font-weight: 800; color: var(--accent-orange); display: flex; align-items: center; gap: 8px; }
+        .action-buttons { display: flex; gap: 12px; margin-top: 16px; }
         .action-btn {
             flex: 1;
             background: var(--accent-orange);
@@ -459,54 +300,83 @@
             font-weight: 600;
             font-size: 16px;
             cursor: pointer;
-            transition: all 0.2s;
         }
+        .stats-row { display: flex; justify-content: space-between; padding: 14px 0; border-bottom: 0.5px solid var(--border-color); }
 
-        .action-btn:active {
-            transform: scale(0.97);
-        }
-
-        .action-btn.secondary {
-            background: transparent;
-            border: 1.5px solid var(--accent-orange);
-            color: var(--accent-orange);
-        }
-
-        .stats-row {
+        /* QR and Deposit */
+        .qr-container {
             display: flex;
-            justify-content: space-between;
-            padding: 14px 0;
-            border-bottom: 0.5px solid var(--border-color);
+            flex-direction: column;
+            align-items: center;
+            gap: 16px;
+            padding: 16px 0;
+        }
+        #qrcode { display: flex; justify-content: center; }
+        .ton-address {
+            background: var(--bg-secondary);
+            padding: 12px;
+            border-radius: 16px;
+            font-size: 12px;
+            word-break: break-all;
+            text-align: center;
+            cursor: pointer;
+        }
+        .min-amount { font-size: 12px; color: var(--text-muted); text-align: center; margin-top: 8px; }
+
+        /* Promo Code */
+        .promo-input-group { display: flex; gap: 10px; margin-top: 12px; }
+        .promo-input {
+            flex: 1;
+            background: var(--bg-secondary);
+            border: 1px solid var(--border-color);
+            border-radius: 16px;
+            padding: 12px;
+            font-size: 14px;
+        }
+        .promo-btn {
+            background: var(--accent-orange);
+            border: none;
+            border-radius: 16px;
+            padding: 12px 20px;
+            color: white;
+            font-weight: 600;
+            cursor: pointer;
         }
 
-        .stats-row:last-child {
-            border-bottom: none;
-        }
-
-        .history-item {
-            padding: 12px 0;
-            border-bottom: 0.5px solid var(--border-color);
+        .referral-link {
+            background: var(--bg-secondary);
+            padding: 12px;
+            border-radius: 16px;
             display: flex;
             justify-content: space-between;
             align-items: center;
+            margin: 12px 0;
+        }
+        .copy-btn {
+            background: var(--accent-orange);
+            border: none;
+            padding: 8px 16px;
+            border-radius: 20px;
+            color: white;
+            font-weight: 600;
+            cursor: pointer;
+        }
+        .support-btn {
+            background: var(--accent-orange);
+            border: none;
+            border-radius: 30px;
+            padding: 14px;
+            color: white;
+            font-weight: 600;
+            font-size: 16px;
+            cursor: pointer;
+            width: 100%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            gap: 8px;
         }
 
-        .history-win {
-            color: #34C759;
-            font-weight: 700;
-        }
-
-        .history-lose {
-            color: #FF3B30;
-            font-weight: 700;
-        }
-
-        .history-date {
-            color: var(--text-muted);
-            font-size: 12px;
-        }
-
-        /* Modals */
         .modal {
             display: none;
             position: fixed;
@@ -520,11 +390,7 @@
             justify-content: center;
             align-items: center;
         }
-
-        .modal.show {
-            display: flex;
-        }
-
+        .modal.show { display: flex; }
         .modal-content {
             background: var(--bg-secondary);
             border-radius: 28px;
@@ -533,66 +399,6 @@
             max-width: 340px;
             text-align: center;
         }
-
-        .modal-content h3 {
-            font-size: 20px;
-            margin-bottom: 16px;
-        }
-
-        .modal-input {
-            width: 100%;
-            padding: 14px;
-            border: 1px solid var(--border-color);
-            border-radius: 16px;
-            font-size: 16px;
-            background: var(--bg-primary);
-            color: var(--text-primary);
-            margin: 16px 0;
-        }
-
-        .avatar-preview {
-            width: 100px;
-            height: 100px;
-            border-radius: 50%;
-            margin: 0 auto 16px;
-            overflow: hidden;
-            border: 3px solid #FF6B00;
-        }
-
-        .file-input-label {
-            background: var(--bg-card);
-            padding: 12px;
-            border-radius: 16px;
-            cursor: pointer;
-            font-size: 14px;
-            display: block;
-        }
-
-        .modal-buttons {
-            display: flex;
-            gap: 12px;
-            margin-top: 16px;
-        }
-
-        .modal-btn {
-            flex: 1;
-            padding: 12px;
-            border-radius: 30px;
-            font-weight: 600;
-            cursor: pointer;
-            border: none;
-        }
-
-        .modal-btn.save {
-            background: #FF6B00;
-            color: white;
-        }
-
-        .modal-btn.cancel {
-            background: var(--bg-card);
-            color: var(--text-primary);
-        }
-
         .notification {
             position: fixed;
             top: 20px;
@@ -606,26 +412,13 @@
             transition: transform 0.3s ease;
             font-size: 14px;
             font-weight: 500;
-            box-shadow: 0 4px 20px rgba(0,0,0,0.15);
         }
-
-        .notification.show {
-            transform: translateX(-50%) translateY(0);
-        }
-
-        @media (max-width: 480px) {
-            .content { padding: 16px 12px 100px 12px; }
-            .profile-card { flex-direction: column; text-align: center; }
-            .stats-section { margin-left: 0; justify-content: center; }
-            .bet-input-group { flex-direction: column; }
-        }
+        .notification.show { transform: translateX(-50%) translateY(0); }
     </style>
 </head>
 <body>
-    <!-- Game Page -->
     <div class="game-page" id="gamePage">
         <main class="content">
-            <!-- Profile Card -->
             <div class="profile-card">
                 <div class="avatar-container" id="avatarContainer">
                     <div class="avatar-outer-glow">
@@ -644,41 +437,65 @@
                 </div>
                 <div class="stats-section">
                     <div class="balance-box">
-                        <div class="balance-label">БАЛАНС</div>
-                        <div class="balance-amount" id="headerBalance">150,000</div>
+                        <img class="ton-icon" src="https://cryptologos.cc/logos/toncoin-ton-logo.png" alt="TON">
+                        <div class="balance-amount" id="headerBalance">0.1</div>
                     </div>
                     <div class="theme-toggle" id="themeToggle">🌙</div>
                 </div>
             </div>
 
-            <!-- Game Container -->
-            <div class="game-container">
-                <div class="game-status waiting" id="gameStatus">
-                    🏀 Сделайте ставку и бросайте мяч!
-                </div>
+            <div class="game-selector">
+                <button class="game-btn active" data-game="basketball">🏀 Баскетбол</button>
+                <button class="game-btn" data-game="darts">🎯 Дартс</button>
+            </div>
 
-                <div class="video-container" id="videoContainer">
-                    <div class="video-overlay" id="videoOverlay"></div>
+            <!-- Basketball Game -->
+            <div class="game-container" id="basketballGame">
+                <div class="game-status waiting" id="basketballStatus">🏀 Сделайте ставку и бросайте мяч!</div>
+                <div class="video-container" id="basketballVideoContainer">
+                    <img class="game-image" id="basketballImage" src="">
+                    <div class="video-overlay" id="basketballOverlay"></div>
                 </div>
-
                 <div class="bet-controls">
                     <div class="bet-input-group">
-                        <input type="number" class="bet-input" id="betInput" placeholder="Сумма ставки" min="10" max="100000" value="1000">
+                        <input type="number" class="bet-input" id="basketballBetInput" placeholder="Ставка в TON" min="0.1" max="10000" step="0.1" value="1">
                         <div class="bet-quick-btns">
-                            <button class="bet-quick-btn" onclick="setBet(500)">500</button>
-                            <button class="bet-quick-btn" onclick="setBet(1000)">1K</button>
-                            <button class="bet-quick-btn" onclick="setBet(5000)">5K</button>
-                            <button class="bet-quick-btn" onclick="setBet(10000)">10K</button>
+                            <button class="bet-quick-btn" onclick="setBet('basketball', 1)">1</button>
+                            <button class="bet-quick-btn" onclick="setBet('basketball', 5)">5</button>
+                            <button class="bet-quick-btn" onclick="setBet('basketball', 10)">10</button>
+                            <button class="bet-quick-btn" onclick="setBet('basketball', 50)">50</button>
                         </div>
                     </div>
-                    <button class="btn-basketball" id="shootBtn" onclick="shootBasket()">
-                        🏀 Поставить и бросить
-                    </button>
+                    <button class="btn-basketball" id="basketballShootBtn" onclick="shootGame('basketball')">🏀 Поставить и бросить</button>
                 </div>
+                <div class="result-display" id="basketballResult">
+                    <div class="result-amount" id="basketballResultAmount">+2</div>
+                    <div class="result-text" id="basketballResultText">Отличный бросок!</div>
+                </div>
+            </div>
 
-                <div class="result-display" id="resultDisplay">
-                    <div class="result-amount" id="resultAmount">+2,000</div>
-                    <div class="result-text" id="resultText">Отличный бросок!</div>
+            <!-- Darts Game -->
+            <div class="game-container" id="dartsGame" style="display: none;">
+                <div class="game-status waiting" id="dartsStatus">🎯 Сделайте ставку и метайте дротик!</div>
+                <div class="video-container" id="dartsVideoContainer">
+                    <img class="game-image" id="dartsImage" src="">
+                    <div class="video-overlay" id="dartsOverlay"></div>
+                </div>
+                <div class="bet-controls">
+                    <div class="bet-input-group">
+                        <input type="number" class="bet-input" id="dartsBetInput" placeholder="Ставка в TON" min="0.1" max="10000" step="0.1" value="1">
+                        <div class="bet-quick-btns">
+                            <button class="bet-quick-btn" onclick="setBet('darts', 1)">1</button>
+                            <button class="bet-quick-btn" onclick="setBet('darts', 5)">5</button>
+                            <button class="bet-quick-btn" onclick="setBet('darts', 10)">10</button>
+                            <button class="bet-quick-btn" onclick="setBet('darts', 50)">50</button>
+                        </div>
+                    </div>
+                    <button class="btn-basketball" id="dartsShootBtn" onclick="shootGame('darts')">🎯 Поставить и метнуть</button>
+                </div>
+                <div class="result-display" id="dartsResult">
+                    <div class="result-amount" id="dartsResultAmount">+2.2</div>
+                    <div class="result-text" id="dartsResultText">Точное попадание!</div>
                 </div>
             </div>
         </main>
@@ -687,73 +504,71 @@
     <!-- Profile Page -->
     <div class="profile-page" id="profilePage">
         <div class="ios-card">
-            <div class="card-header">
-                <span>💰 Баланс</span>
-                <span>💎</span>
-            </div>
-            <div class="balance-large" id="profileBalance">150,000</div>
-            <div class="action-buttons">
-                <button class="action-btn" id="depositBtn">💳 Пополнить</button>
-                <button class="action-btn secondary" id="withdrawBtn">💸 Вывести</button>
+            <div class="card-header"><span>💰 Мой баланс</span><span>💎</span></div>
+            <div class="balance-large">
+                <img class="ton-icon" src="https://cryptologos.cc/logos/toncoin-ton-logo.png" alt="TON" style="width: 40px; height: 40px;">
+                <span id="profileBalance">0.1</span> TON
             </div>
         </div>
 
         <div class="ios-card">
-            <div class="card-header">
-                <span>📊 Статистика</span>
-                <span>🏆</span>
-            </div>
-            <div class="stats-row">
-                <span>Всего ставок</span>
-                <span id="totalBets" style="font-weight: 700;">0</span>
-            </div>
-            <div class="stats-row">
-                <span>Выигрышей</span>
-                <span id="totalWins" style="color: #34C759; font-weight: 700;">0</span>
-            </div>
-            <div class="stats-row">
-                <span>Проигрышей</span>
-                <span id="totalLosses" style="color: #FF3B30; font-weight: 700;">0</span>
-            </div>
-            <div class="stats-row">
-                <span>Оборот средств</span>
-                <span id="totalTurnover" style="font-weight: 700;">0</span>
+            <div class="card-header"><span>💳 Пополнение баланса</span><span>👇</span></div>
+            <div class="qr-container" id="qrContainer"></div>
+            <div class="ton-address" id="tonAddress" onclick="copyAddress()">UQA1HUaqG9VULmU4QoLwPHDxAY3F0g3RQFzBKtCX2mATU01p</div>
+            <div class="min-amount">⚠️ Минимальная сумма пополнения: 1 TON</div>
+            <div class="min-amount" style="color: var(--accent-orange);">💰 Средства зачисляются автоматически после перевода</div>
+        </div>
+
+        <div class="ios-card">
+            <div class="card-header"><span>🎁 Промокод</span><span>✨</span></div>
+            <div class="promo-input-group">
+                <input type="text" class="promo-input" id="promoCodeInput" placeholder="Введите промокод">
+                <button class="promo-btn" onclick="activatePromoCode()">Активировать</button>
             </div>
         </div>
 
         <div class="ios-card">
-            <div class="card-header">
-                <span>📜 История игр</span>
-                <span>🕐</span>
+            <div class="card-header"><span>👥 Реферальная программа</span><span>🎁</span></div>
+            <div class="stats-row"><span>Приглашено друзей</span><span id="referralCount" style="font-weight: 700;">0</span></div>
+            <div class="stats-row"><span>Заработано с рефералов</span><span id="referralEarned" style="color: var(--accent-orange); font-weight: 700;">0 TON</span></div>
+            <div class="referral-link">
+                <span id="referralLinkText" style="font-size: 12px; overflow: hidden; text-overflow: ellipsis;">loading...</span>
+                <button class="copy-btn" onclick="copyReferralLink()">Копировать</button>
             </div>
-            <div id="historyList">
-                <div style="text-align: center; color: var(--text-muted); padding: 20px;">
-                    🤝 История пуста
-                </div>
-            </div>
+            <div style="font-size: 12px; color: var(--text-muted); text-align: center; margin-top: 12px;">💰 За каждого приглашённого друга вы получаете <strong>2 TON</strong> на баланс!</div>
         </div>
+
+        <div class="ios-card">
+            <div class="card-header"><span>📊 Статистика</span><span>🏆</span></div>
+            <div class="stats-row"><span>Всего ставок</span><span id="totalBets">0</span></div>
+            <div class="stats-row"><span>Выигрышей</span><span id="totalWins" style="color: #34C759;">0</span></div>
+            <div class="stats-row"><span>Проигрышей</span><span id="totalLosses" style="color: #FF3B30;">0</span></div>
+            <div class="stats-row"><span>Оборот средств</span><span id="totalTurnover">0 TON</span></div>
+        </div>
+
+        <div class="ios-card">
+            <div class="card-header"><span>📜 История игр</span><span>🕐</span></div>
+            <div id="historyList"><div style="text-align: center; color: var(--text-muted); padding: 20px;">🤝 История пуста</div></div>
+        </div>
+
+        <button class="support-btn" onclick="window.open('https://t.me/haunterof', '_blank')">📱 Тех.Поддержка</button>
+        <div style="height: 20px;"></div>
     </div>
 
-    <!-- Bottom Navigation Bar -->
+    <!-- Bottom Navigation -->
     <div class="bottom-nav">
-        <div class="nav-item active" data-tab="game">
-            <div class="nav-icon">🏀</div>
-            <div class="nav-label">Игры</div>
-        </div>
-        <div class="nav-item" data-tab="profile">
-            <div class="nav-icon">👤</div>
-            <div class="nav-label">Профиль</div>
-        </div>
+        <div class="nav-item active" data-tab="game"><div class="nav-icon">🎮</div><div class="nav-label">Игры</div></div>
+        <div class="nav-item" data-tab="profile"><div class="nav-icon">👤</div><div class="nav-label">Профиль</div></div>
     </div>
 
     <!-- Modals -->
     <div class="modal" id="usernameModal">
         <div class="modal-content">
             <h3>👤 Изменить ник</h3>
-            <input type="text" class="modal-input" id="usernameInput" placeholder="Введите ваш ник" maxlength="20">
-            <div class="modal-buttons">
-                <button class="modal-btn cancel" onclick="closeUsernameModal()">Отмена</button>
-                <button class="modal-btn save" onclick="saveUsername()">Сохранить</button>
+            <input type="text" class="modal-input" id="usernameInput" placeholder="Введите ваш ник" maxlength="20" style="width:100%; padding:12px; margin:16px 0; border-radius:16px; border:1px solid var(--border-color); background:var(--bg-primary);">
+            <div class="modal-buttons" style="display:flex; gap:12px;">
+                <button class="modal-btn cancel" onclick="closeUsernameModal()" style="flex:1; padding:12px; border-radius:30px; background:var(--bg-card);">Отмена</button>
+                <button class="modal-btn save" onclick="saveUsername()" style="flex:1; padding:12px; border-radius:30px; background:#FF6B00; color:white;">Сохранить</button>
             </div>
         </div>
     </div>
@@ -761,16 +576,16 @@
     <div class="modal" id="avatarModal">
         <div class="modal-content">
             <h3>📸 Загрузить аватар</h3>
-            <div class="avatar-preview">
-                <img id="avatarPreview" src="" alt="Preview" style="width:100%; height:100%; object-fit:cover;">
+            <div class="avatar-preview" style="width:100px; height:100px; border-radius:50%; margin:0 auto 16px; overflow:hidden; border:3px solid #FF6B00;">
+                <img id="avatarPreview" src="" style="width:100%; height:100%; object-fit:cover;">
             </div>
-            <label class="file-input-label">
+            <label class="file-input-label" style="display:block; background:var(--bg-card); padding:12px; border-radius:16px; cursor:pointer;">
                 📁 Выбрать изображение
-                <input type="file" id="avatarFileInput" accept="image/jpeg,image/png,image/gif,image/webp">
+                <input type="file" id="avatarFileInput" accept="image/jpeg,image/png,image/gif,image/webp" style="display:none;">
             </label>
-            <div class="modal-buttons">
-                <button class="modal-btn cancel" onclick="closeAvatarModal()">Отмена</button>
-                <button class="modal-btn save" onclick="saveAvatar()">Сохранить</button>
+            <div class="modal-buttons" style="display:flex; gap:12px; margin-top:16px;">
+                <button class="modal-btn cancel" onclick="closeAvatarModal()" style="flex:1; padding:12px; border-radius:30px; background:var(--bg-card);">Отмена</button>
+                <button class="modal-btn save" onclick="saveAvatar()" style="flex:1; padding:12px; border-radius:30px; background:#FF6B00; color:white;">Применить</button>
             </div>
         </div>
     </div>
@@ -780,38 +595,47 @@
     <script>
         // Game State
         let gameState = {
-            balance: 150000,
+            balance: 0.1,
             isPlaying: false,
+            currentGame: 'basketball',
             username: 'Игрок',
             avatarUrl: 'https://i.pravatar.cc/150?img=7',
             totalBets: 0,
             totalWins: 0,
             totalLosses: 0,
             totalTurnover: 0,
-            history: []
+            history: [],
+            referralCount: 0,
+            referralEarned: 0,
+            referralCode: Math.random().toString(36).substring(2, 8).toUpperCase(),
+            usedPromoCodes: [],
+            winStreakGames: 0
         };
 
-        let selectedAvatarFile = null;
-        let currentVideo = null;
-        let currentDelayTimeout = null;
-
-        const gameConfig = {
-            winChance: 0.45,
-            winMultiplier: 2.0,
-            videos: {
-                waiting: 'https://allwebs.ru/images/2026/05/02/7f574ab1876dab4979626f5d5ffb9ef0.mp4',
-                win: 'https://allwebs.ru/images/2026/05/02/03bb39c996c3cce6a10fcf4a8bc46c5a.mp4',
-                lose: 'https://allwebs.ru/images/2026/05/02/0ffc346afe4b38f23b3d25fbe0500142.mp4'
+        const gameConfigs = {
+            basketball: {
+                name: 'Баскетбол', winChance: 0.45, winMultiplier: 2.0,
+                images: { waiting: 'https://i.ibb.co/rR5fhwKy/Ag-ADaw-YAAt6fs-Uc-gif.gif', win: 'https://i.ibb.co/KpdN2Fnm/222-1.gif', lose: 'https://i.ibb.co/wNtHVBQF/Ag-ADa-QYAAt6fs-Uc-gif.gif' },
+                statusText: { waiting: '🏀 Сделайте ставку и бросайте мяч!', playing: '🏀 Мяч в полёте...', win: '🎉 ПОПАДАНИЕ! Вы выиграли!', lose: '💔 ПРОМАХ! Попробуйте ещё раз' },
+                buttonText: { idle: '🏀 Поставить и бросить', playing: '🎯 Бросаем...' }
             },
-            fadeDelay: 500,
-            gameVideoDelay: 3012
+            darts: {
+                name: 'Дартс', winChance: 0.40, winMultiplier: 2.2,
+                images: { waiting: 'https://i.ibb.co/r2q6qLgb/image.gif', win: 'https://i.ibb.co/nvhtj6Q/image.gif', lose: 'https://i.ibb.co/ycWbkwJr/image.gif' },
+                statusText: { waiting: '🎯 Сделайте ставку и метайте дротик!', playing: '🎯 Дротик в полёте...', win: '🎯 ТОЧНОЕ ПОПАДАНИЕ! Вы выиграли!', lose: '💔 ПРОМАХ! Попробуйте ещё раз' },
+                buttonText: { idle: '🎯 Поставить и метнуть', playing: '🎯 Метаем...' }
+            }
         };
+
+        let currentImageTimeouts = { basketball: null, darts: null };
+        let isGamePlaying = { basketball: false, darts: false };
+        let qrGenerated = false;
 
         function loadState() {
             const saved = localStorage.getItem('haunterState');
             if (saved) {
                 const savedState = JSON.parse(saved);
-                gameState.balance = savedState.balance || 150000;
+                gameState.balance = savedState.balance ?? 0.1;
                 gameState.username = savedState.username || 'Игрок';
                 gameState.avatarUrl = savedState.avatarUrl || 'https://i.pravatar.cc/150?img=7';
                 gameState.totalBets = savedState.totalBets || 0;
@@ -819,14 +643,20 @@
                 gameState.totalLosses = savedState.totalLosses || 0;
                 gameState.totalTurnover = savedState.totalTurnover || 0;
                 gameState.history = savedState.history || [];
+                gameState.referralCount = savedState.referralCount || 0;
+                gameState.referralEarned = savedState.referralEarned || 0;
+                gameState.referralCode = savedState.referralCode || Math.random().toString(36).substring(2, 8).toUpperCase();
+                gameState.usedPromoCodes = savedState.usedPromoCodes || [];
+                gameState.winStreakGames = savedState.winStreakGames || 0;
                 updateBalanceDisplay();
                 updateProfileDisplay();
                 updateStatsDisplay();
+                updateReferralDisplay();
             }
         }
 
         function saveState() {
-            const savedState = {
+            localStorage.setItem('haunterState', JSON.stringify({
                 balance: gameState.balance,
                 username: gameState.username,
                 avatarUrl: gameState.avatarUrl,
@@ -834,13 +664,17 @@
                 totalWins: gameState.totalWins,
                 totalLosses: gameState.totalLosses,
                 totalTurnover: gameState.totalTurnover,
-                history: gameState.history
-            };
-            localStorage.setItem('haunterState', JSON.stringify(savedState));
+                history: gameState.history,
+                referralCount: gameState.referralCount,
+                referralEarned: gameState.referralEarned,
+                referralCode: gameState.referralCode,
+                usedPromoCodes: gameState.usedPromoCodes,
+                winStreakGames: gameState.winStreakGames
+            }));
         }
 
         function updateBalanceDisplay() {
-            const formatted = formatNumber(gameState.balance);
+            const formatted = gameState.balance.toFixed(2);
             document.getElementById('headerBalance').textContent = formatted;
             document.getElementById('profileBalance').textContent = formatted;
         }
@@ -850,204 +684,181 @@
             document.getElementById('avatarImg').src = gameState.avatarUrl;
         }
 
+        function updateReferralDisplay() {
+            document.getElementById('referralCount').textContent = gameState.referralCount;
+            document.getElementById('referralEarned').textContent = gameState.referralEarned.toFixed(2) + ' TON';
+            const link = `${window.location.origin}${window.location.pathname}?ref=${gameState.referralCode}`;
+            document.getElementById('referralLinkText').textContent = link;
+        }
+
         function updateStatsDisplay() {
             document.getElementById('totalBets').textContent = gameState.totalBets;
             document.getElementById('totalWins').textContent = gameState.totalWins;
             document.getElementById('totalLosses').textContent = gameState.totalLosses;
-            document.getElementById('totalTurnover').textContent = formatNumber(gameState.totalTurnover);
+            document.getElementById('totalTurnover').textContent = gameState.totalTurnover.toFixed(2) + ' TON';
             
             const historyDiv = document.getElementById('historyList');
             if (gameState.history.length === 0) {
                 historyDiv.innerHTML = '<div style="text-align: center; color: var(--text-muted); padding: 20px;">🤝 История пуста</div>';
             } else {
                 historyDiv.innerHTML = gameState.history.slice().reverse().map(item => `
-                    <div class="history-item">
-                        <div>
-                            <div class="history-date">${item.date}</div>
-                            <div style="font-size: 13px; margin-top: 4px;">${item.result === 'win' ? '🎉 Победа' : '😔 Поражение'}</div>
-                        </div>
-                        <div class="${item.result === 'win' ? 'history-win' : 'history-lose'}">
-                            ${item.result === 'win' ? '+' + formatNumber(item.amount) : '-' + formatNumber(item.amount)}
-                        </div>
+                    <div style="padding:12px 0; border-bottom:0.5px solid var(--border-color); display:flex; justify-content:space-between; align-items:center;">
+                        <div><div style="color: var(--text-muted); font-size:12px;">${item.date}</div><div style="font-size:13px; margin-top:4px;">${item.game === 'basketball' ? '🏀' : '🎯'} ${item.gameName}</div></div>
+                        <div style="${item.result === 'win' ? 'color:#34C759' : 'color:#FF3B30'} font-weight:700;">${item.result === 'win' ? '+' + item.amount.toFixed(2) : '-' + item.amount.toFixed(2)} TON</div>
                     </div>
                 `).join('');
             }
         }
 
-        function addToHistory(result, amount) {
+        function addToHistory(game, gameName, result, amount) {
             const now = new Date();
             const dateStr = `${now.getDate().toString().padStart(2,'0')}.${(now.getMonth()+1).toString().padStart(2,'0')} ${now.getHours().toString().padStart(2,'0')}:${now.getMinutes().toString().padStart(2,'0')}`;
-            gameState.history.push({ date: dateStr, result: result, amount: amount });
-            if (gameState.history.length > 20) gameState.history.shift();
+            gameState.history.push({ game, gameName, date: dateStr, result, amount });
+            if (gameState.history.length > 30) gameState.history.shift();
             updateStatsDisplay();
             saveState();
         }
 
-        function formatNumber(num) {
-            if (num >= 1000000) return (num / 1000000).toFixed(1) + 'M';
-            if (num >= 1000) return (num / 1000).toFixed(1) + 'K';
-            return num.toLocaleString();
-        }
-
-        function showNotification(message, type = 'success') {
+        function showNotification(message) {
             const notification = document.getElementById('notification');
             notification.textContent = message;
             notification.className = 'notification show';
             setTimeout(() => notification.classList.remove('show'), 2500);
         }
 
-        function setBet(amount) { document.getElementById('betInput').value = amount; }
+        function setBet(game, amount) { document.getElementById(`${game}BetInput`).value = amount; }
 
-        function validateBet(amount) {
-            if (isNaN(amount) || amount <= 0) { showNotification('Введите корректную сумму', 'error'); return false; }
-            if (amount < 10) { showNotification('Минимальная ставка: 10 монет', 'error'); return false; }
-            if (amount > 100000) { showNotification('Максимальная ставка: 100,000 монет', 'error'); return false; }
-            if (amount > gameState.balance) { showNotification('Недостаточно средств', 'error'); return false; }
+        function validateBet(game, amount) {
+            if (isNaN(amount) || amount <= 0) { showNotification('Введите корректную сумму'); return false; }
+            if (amount < 0.1) { showNotification('Минимальная ставка: 0.1 TON'); return false; }
+            if (amount > gameState.balance) { showNotification('Недостаточно средств'); return false; }
             return true;
         }
 
-        function createVideoElement(src, loop = false) {
-            const video = document.createElement('video');
-            video.className = 'game-video';
-            video.muted = true;
-            video.playsInline = true;
-            video.autoplay = true;
-            video.preload = 'auto';
-            video.loop = loop;
-            video.disablePictureInPicture = true;
-            video.controls = false;
-            video.src = src;
-            return video;
-        }
-
-        function changeVideo(videoUrl, loop = false) {
+        function changeImage(game, imageUrl) {
             return new Promise((resolve, reject) => {
-                if (currentVideo) {
-                    currentVideo.pause();
-                    currentVideo.src = '';
-                    currentVideo.remove();
-                    currentVideo = null;
-                }
-                const newVideo = createVideoElement(videoUrl, loop);
-                newVideo.onloadeddata = () => {
-                    currentVideo = newVideo;
-                    document.getElementById('videoContainer').insertBefore(newVideo, document.getElementById('videoOverlay'));
-                    newVideo.play().catch(e => console.log(e));
-                    resolve(newVideo);
-                };
-                newVideo.onerror = () => reject(new Error('Failed to load video'));
-                newVideo.load();
+                const img = document.getElementById(`${game}Image`);
+                if (!img) { reject(); return; }
+                img.src = imageUrl;
+                img.onload = () => resolve();
+                img.onerror = () => reject();
             });
         }
 
-        function playFadeTransition() {
+        function playFadeTransition(game) {
             return new Promise((resolve) => {
-                document.getElementById('videoOverlay').classList.add('fade');
-                setTimeout(resolve, gameConfig.fadeDelay);
+                const overlay = document.getElementById(`${game}Overlay`);
+                overlay.classList.add('fade');
+                setTimeout(resolve, 500);
             });
         }
 
-        function removeFade() { document.getElementById('videoOverlay').classList.remove('fade'); }
+        function removeFade(game) { document.getElementById(`${game}Overlay`).classList.remove('fade'); }
 
-        async function shootBasket() {
-            if (gameState.isPlaying) return;
-            const betAmount = parseInt(document.getElementById('betInput').value);
-            if (!validateBet(betAmount)) return;
+        async function shootGame(game) {
+            if (isGamePlaying[game]) return;
+            const betAmount = parseFloat(document.getElementById(`${game}BetInput`).value);
+            if (!validateBet(game, betAmount)) return;
             
-            gameState.isPlaying = true;
+            const config = gameConfigs[game];
+            isGamePlaying[game] = true;
             gameState.balance -= betAmount;
             gameState.totalBets++;
             gameState.totalTurnover += betAmount;
             updateBalanceDisplay();
             saveState();
             
-            const shootBtn = document.getElementById('shootBtn');
-            const gameStatus = document.getElementById('gameStatus');
-            const resultDisplay = document.getElementById('resultDisplay');
+            const shootBtn = document.getElementById(`${game}ShootBtn`);
+            const gameStatus = document.getElementById(`${game}Status`);
+            const resultDisplay = document.getElementById(`${game}Result`);
             
             shootBtn.disabled = true;
-            shootBtn.textContent = '🎯 Бросаем...';
-            gameStatus.textContent = '🏀 Мяч в полёте...';
-            gameStatus.className = 'game-status playing';
+            shootBtn.textContent = config.buttonText.playing;
+            gameStatus.textContent = config.statusText.playing;
             resultDisplay.classList.remove('show');
             
-            const isWin = Math.random() < gameConfig.winChance;
-            const resultVideoUrl = isWin ? gameConfig.videos.win : gameConfig.videos.lose;
+            let isWin;
+            if (gameState.winStreakGames > 0) {
+                isWin = true;
+                gameState.winStreakGames--;
+                showNotification(`✨ Активирован гарантированный выигрыш! Осталось игр: ${gameState.winStreakGames}`);
+                saveState();
+            } else {
+                isWin = Math.random() < config.winChance;
+            }
+            
+            const resultImageUrl = isWin ? config.images.win : config.images.lose;
             
             try {
-                await playFadeTransition();
-                await changeVideo(gameConfig.videos.waiting, false);
-                removeFade();
-                await new Promise(resolve => { currentDelayTimeout = setTimeout(resolve, gameConfig.gameVideoDelay); });
-                await playFadeTransition();
-                await changeVideo(resultVideoUrl, false);
-                removeFade();
+                await playFadeTransition(game);
+                await changeImage(game, config.images.waiting);
+                removeFade(game);
+                await new Promise(resolve => { currentImageTimeouts[game] = setTimeout(resolve, 3012); });
+                await playFadeTransition(game);
+                await changeImage(game, resultImageUrl);
+                removeFade(game);
                 
-                if (currentVideo) {
-                    currentVideo.onended = async () => {
-                        currentVideo.pause();
-                        processGameResult(isWin, betAmount);
-                        setTimeout(async () => {
-                            await playFadeTransition();
-                            await changeVideo(gameConfig.videos.waiting, true);
-                            removeFade();
-                            resetGame();
-                        }, 2000);
-                    };
-                }
-            } catch (error) {
-                showNotification('Ошибка игры', 'error');
-                gameState.balance += betAmount;
-                updateBalanceDisplay();
-                saveState();
-                resetGame();
-            }
+                setTimeout(async () => {
+                    if (isWin) {
+                        const winAmount = betAmount * config.winMultiplier;
+                        gameState.balance += winAmount;
+                        gameState.totalWins++;
+                        updateBalanceDisplay();
+                        gameStatus.textContent = config.statusText.win;
+                        gameStatus.className = 'game-status win';
+                        document.getElementById(`${game}ResultAmount`).textContent = '+' + winAmount.toFixed(2) + ' TON';
+                        document.getElementById(`${game}ResultAmount`).className = 'result-amount win';
+                        document.getElementById(`${game}ResultText`).textContent = config.name + '! +' + winAmount.toFixed(2) + ' TON';
+                        showNotification(`🎉 Вы выиграли ${winAmount.toFixed(2)} TON в ${config.name}!`);
+                        addToHistory(game, config.name, 'win', winAmount);
+                    } else {
+                        gameState.totalLosses++;
+                        gameStatus.textContent = config.statusText.lose;
+                        gameStatus.className = 'game-status lose';
+                        document.getElementById(`${game}ResultAmount`).textContent = '-' + betAmount.toFixed(2) + ' TON';
+                        document.getElementById(`${game}ResultAmount`).className = 'result-amount lose';
+                        document.getElementById(`${game}ResultText`).textContent = 'Проигрыш -' + betAmount.toFixed(2) + ' TON';
+                        showNotification(`😔 Вы проиграли ${betAmount.toFixed(2)} TON в ${config.name}`);
+                        addToHistory(game, config.name, 'lose', betAmount);
+                    }
+                    document.getElementById(`${game}Result`).classList.add('show');
+                    updateStatsDisplay();
+                    saveState();
+                    
+                    setTimeout(async () => {
+                        await playFadeTransition(game);
+                        await changeImage(game, config.images.waiting);
+                        removeFade(game);
+                        resetGame(game, config);
+                    }, 2000);
+                }, 3000);
+            } catch (error) { resetGame(game, config); }
         }
 
-        function processGameResult(isWin, betAmount) {
-            if (isWin) {
-                const winAmount = Math.floor(betAmount * gameConfig.winMultiplier);
-                gameState.balance += winAmount;
-                gameState.totalWins++;
-                updateBalanceDisplay();
-                document.getElementById('gameStatus').textContent = '🎉 ПОПАДАНИЕ! Вы выиграли!';
-                document.getElementById('gameStatus').className = 'game-status win';
-                document.getElementById('resultAmount').textContent = '+' + formatNumber(winAmount);
-                document.getElementById('resultAmount').className = 'result-amount win';
-                document.getElementById('resultText').textContent = 'Отличный бросок! +' + formatNumber(winAmount);
-                showNotification(`🎉 Вы выиграли ${formatNumber(winAmount)} монет!`);
-                addToHistory('win', winAmount);
-            } else {
-                gameState.totalLosses++;
-                document.getElementById('gameStatus').textContent = '💔 ПРОМАХ! Попробуйте ещё раз';
-                document.getElementById('gameStatus').className = 'game-status lose';
-                document.getElementById('resultAmount').textContent = '-' + formatNumber(betAmount);
-                document.getElementById('resultAmount').className = 'result-amount lose';
-                document.getElementById('resultText').textContent = 'Не попали в корзину -' + formatNumber(betAmount);
-                showNotification(`😔 Вы проиграли ${formatNumber(betAmount)} монет`, 'error');
-                addToHistory('lose', betAmount);
-            }
-            document.getElementById('resultDisplay').classList.add('show');
-            updateStatsDisplay();
-            saveState();
-        }
-
-        function resetGame() {
-            if (currentDelayTimeout) clearTimeout(currentDelayTimeout);
-            gameState.isPlaying = false;
-            const shootBtn = document.getElementById('shootBtn');
+        function resetGame(game, config) {
+            if (currentImageTimeouts[game]) clearTimeout(currentImageTimeouts[game]);
+            isGamePlaying[game] = false;
+            const shootBtn = document.getElementById(`${game}ShootBtn`);
             shootBtn.disabled = false;
-            shootBtn.innerHTML = '🏀 Поставить и бросить';
-            document.getElementById('gameStatus').textContent = '🏀 Сделайте ставку и бросайте мяч!';
-            document.getElementById('gameStatus').className = 'game-status waiting';
+            shootBtn.textContent = config.buttonText.idle;
+            document.getElementById(`${game}Status`).textContent = config.statusText.waiting;
+            document.getElementById(`${game}Status`).className = 'game-status waiting';
+        }
+
+        function switchGame(game) {
+            gameState.currentGame = game;
+            document.getElementById('basketballGame').style.display = game === 'basketball' ? 'block' : 'none';
+            document.getElementById('dartsGame').style.display = game === 'darts' ? 'block' : 'none';
+            document.querySelectorAll('.game-btn').forEach(btn => {
+                if (btn.dataset.game === game) btn.classList.add('active');
+                else btn.classList.remove('active');
+            });
         }
 
         function switchTab(tab) {
             const gamePage = document.getElementById('gamePage');
             const profilePage = document.getElementById('profilePage');
-            const navItems = document.querySelectorAll('.nav-item');
-            
-            navItems.forEach(item => item.classList.remove('active'));
+            document.querySelectorAll('.nav-item').forEach(item => item.classList.remove('active'));
             document.querySelector(`.nav-item[data-tab="${tab}"]`).classList.add('active');
             
             if (tab === 'game') {
@@ -1059,7 +870,76 @@
                 profilePage.style.display = 'block';
                 profilePage.classList.add('show');
                 updateStatsDisplay();
+                updateReferralDisplay();
+                if (!qrGenerated) generateQR();
             }
+        }
+
+        function generateQR() {
+            if (typeof QRCode !== 'undefined') {
+                new QRCode(document.getElementById("qrContainer"), {
+                    text: "UQA1HUaqG9VULmU4QoLwPHDxAY3F0g3RQFzBKtCX2mATU01p",
+                    width: 180,
+                    height: 180,
+                    colorDark: "#000000",
+                    colorLight: "#ffffff",
+                    correctLevel: QRCode.CorrectLevel.H
+                });
+                qrGenerated = true;
+            }
+        }
+
+        function copyAddress() {
+            navigator.clipboard.writeText("UQA1HUaqG9VULmU4QoLwPHDxAY3F0g3RQFzBKtCX2mATU01p");
+            showNotification("✅ Адрес скопирован! Отправьте от 1 TON");
+        }
+
+        function copyReferralLink() {
+            const link = `${window.location.origin}${window.location.pathname}?ref=${gameState.referralCode}`;
+            navigator.clipboard.writeText(link);
+            showNotification('✅ Реферальная ссылка скопирована!');
+        }
+
+        function checkReferral() {
+            const urlParams = new URLSearchParams(window.location.search);
+            const refCode = urlParams.get('ref');
+            if (refCode && refCode !== gameState.referralCode) {
+                gameState.referralCount++;
+                gameState.referralEarned += 2;
+                gameState.balance += 2;
+                updateBalanceDisplay();
+                updateReferralDisplay();
+                saveState();
+                showNotification('🎉 Вам начислено 2 TON за приглашённого друга!');
+            }
+        }
+
+        function activatePromoCode() {
+            const code = document.getElementById('promoCodeInput').value.trim().toUpperCase();
+            if (!code) { showNotification('Введите промокод'); return; }
+            if (gameState.usedPromoCodes.includes(code)) { showNotification('❌ Промокод уже активирован!'); return; }
+            
+            if (code === '1.00TON') {
+                gameState.balance += 1;
+                gameState.usedPromoCodes.push(code);
+                updateBalanceDisplay();
+                saveState();
+                showNotification('✅ Промокод активирован! Получено 1 TON');
+            } else if (code === '15T') {
+                gameState.balance += 1.5;
+                gameState.usedPromoCodes.push(code);
+                updateBalanceDisplay();
+                saveState();
+                showNotification('✅ Промокод активирован! Получено 1.5 TON');
+            } else if (code === 'WINTON') {
+                gameState.winStreakGames = 3;
+                gameState.usedPromoCodes.push(code);
+                saveState();
+                showNotification('✨ Промокод активирован! Следующие 3 игры будут выигрышными!');
+            } else {
+                showNotification('❌ Неверный промокод');
+            }
+            document.getElementById('promoCodeInput').value = '';
         }
 
         function toggleTheme() {
@@ -1069,91 +949,50 @@
             localStorage.setItem('haunterTheme', document.body.classList.contains('dark') ? 'dark' : 'light');
         }
 
-        function openUsernameModal() {
-            document.getElementById('usernameInput').value = gameState.username;
-            document.getElementById('usernameModal').classList.add('show');
-        }
+        let selectedAvatarFile = null;
+        function openUsernameModal() { document.getElementById('usernameModal').classList.add('show'); }
         function closeUsernameModal() { document.getElementById('usernameModal').classList.remove('show'); }
         function saveUsername() {
             const newUsername = document.getElementById('usernameInput').value.trim();
-            if (newUsername) {
-                gameState.username = newUsername;
-                updateProfileDisplay();
-                saveState();
-                showNotification('✨ Ник изменён!');
-            }
+            if (newUsername) { gameState.username = newUsername; updateProfileDisplay(); saveState(); showNotification('✨ Ник изменён!'); }
             closeUsernameModal();
         }
-        function openAvatarModal() {
-            document.getElementById('avatarPreview').src = gameState.avatarUrl;
-            document.getElementById('avatarModal').classList.add('show');
-        }
+        function openAvatarModal() { document.getElementById('avatarPreview').src = gameState.avatarUrl; document.getElementById('avatarModal').classList.add('show'); }
         function closeAvatarModal() { document.getElementById('avatarModal').classList.remove('show'); }
         function saveAvatar() {
             if (selectedAvatarFile) {
                 const reader = new FileReader();
-                reader.onload = function(e) {
-                    gameState.avatarUrl = e.target.result;
-                    updateProfileDisplay();
-                    saveState();
-                    showNotification('🖼️ Аватар обновлён!');
-                    closeAvatarModal();
-                };
+                reader.onload = function(e) { gameState.avatarUrl = e.target.result; updateProfileDisplay(); saveState(); showNotification('🖼️ Аватар обновлён!'); closeAvatarModal(); };
                 reader.readAsDataURL(selectedAvatarFile);
             } else closeAvatarModal();
         }
 
-        function deposit() {
-            const amount = prompt('💰 Введите сумму пополнения:', '1000');
-            if (amount && !isNaN(amount) && parseInt(amount) > 0) {
-                gameState.balance += parseInt(amount);
-                updateBalanceDisplay();
-                saveState();
-                showNotification(`✅ Пополнено на ${formatNumber(parseInt(amount))} монет!`);
-            }
-        }
-        function withdraw() {
-            const amount = prompt('💸 Введите сумму вывода:', '1000');
-            if (amount && !isNaN(amount) && parseInt(amount) > 0) {
-                if (parseInt(amount) <= gameState.balance) {
-                    gameState.balance -= parseInt(amount);
-                    updateBalanceDisplay();
-                    saveState();
-                    showNotification(`✅ Выведено ${formatNumber(parseInt(amount))} монет!`);
-                } else showNotification('❌ Недостаточно средств!', 'error');
-            }
-        }
-
         async function initGame() {
             loadState();
+            checkReferral();
             const savedTheme = localStorage.getItem('haunterTheme');
             if (savedTheme === 'dark') document.body.classList.add('dark');
             document.getElementById('themeToggle').textContent = document.body.classList.contains('dark') ? '☀️' : '🌙';
             
             document.getElementById('editNickBtn').addEventListener('click', openUsernameModal);
             document.getElementById('avatarContainer').addEventListener('click', openAvatarModal);
-            document.getElementById('depositBtn').addEventListener('click', deposit);
-            document.getElementById('withdrawBtn').addEventListener('click', withdraw);
             document.getElementById('themeToggle').addEventListener('click', toggleTheme);
-            
-            document.querySelectorAll('.nav-item').forEach(item => {
-                item.addEventListener('click', () => switchTab(item.dataset.tab));
-            });
+            document.querySelectorAll('.nav-item').forEach(item => item.addEventListener('click', () => switchTab(item.dataset.tab)));
+            document.querySelectorAll('.game-btn').forEach(btn => btn.addEventListener('click', () => switchGame(btn.dataset.game)));
             
             const fileInput = document.getElementById('avatarFileInput');
             fileInput.addEventListener('change', function(e) {
                 if (e.target.files && e.target.files[0]) {
                     selectedAvatarFile = e.target.files[0];
                     const reader = new FileReader();
-                    reader.onload = function(event) {
-                        document.getElementById('avatarPreview').src = event.target.result;
-                    };
+                    reader.onload = function(event) { document.getElementById('avatarPreview').src = event.target.result; };
                     reader.readAsDataURL(selectedAvatarFile);
                 }
             });
             
             try {
-                await changeVideo(gameConfig.videos.waiting, true);
+                await changeImage('basketball', gameConfigs.basketball.images.waiting);
+                await changeImage('darts', gameConfigs.darts.images.waiting);
             } catch (error) { console.error(error); }
         }
         
