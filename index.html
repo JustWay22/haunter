@@ -60,7 +60,6 @@
             margin: 0 auto;
         }
 
-        /* Profile Card */
         .profile-card {
             background: linear-gradient(135deg, var(--bg-card), var(--bg-card-hover));
             border-radius: 28px;
@@ -102,12 +101,7 @@
             background: var(--bg-secondary);
         }
 
-        .avatar {
-            width: 100%;
-            height: 100%;
-            object-fit: cover;
-        }
-
+        .avatar { width: 100%; height: 100%; object-fit: cover; }
         .avatar-upload-hint {
             position: absolute;
             bottom: -2px;
@@ -145,7 +139,6 @@
         .balance-amount { font-size: 18px; font-weight: 800; color: var(--accent-orange); }
         .theme-toggle { background: var(--bg-secondary); border: none; border-radius: 30px; padding: 8px 14px; cursor: pointer; font-size: 20px; }
 
-        /* Game Selector */
         .game-selector { display: flex; gap: 12px; margin-bottom: 16px; justify-content: flex-end; }
         .game-btn {
             background: var(--bg-secondary);
@@ -161,7 +154,6 @@
         }
         .game-btn.active { background: var(--accent-orange); color: white; border-color: var(--accent-orange); }
 
-        /* Game Container */
         .game-container {
             background: var(--bg-card);
             border-radius: 28px;
@@ -245,7 +237,6 @@
         .result-amount.win { color: #34C759; }
         .result-amount.lose { color: #FF3B30; }
 
-        /* Bottom Navigation */
         .bottom-nav {
             position: fixed;
             bottom: 0;
@@ -274,7 +265,6 @@
         .nav-label { font-size: 11px; font-weight: 600; }
         .nav-item.active .nav-label { color: white; }
 
-        /* Profile Page */
         .profile-page { display: none; padding: 20px 16px 100px 16px; max-width: 600px; margin: 0 auto; }
         .profile-page.show { display: block; }
         .game-page { display: block; }
@@ -303,14 +293,7 @@
         }
         .stats-row { display: flex; justify-content: space-between; padding: 14px 0; border-bottom: 0.5px solid var(--border-color); }
 
-        /* QR and Deposit */
-        .qr-container {
-            display: flex;
-            flex-direction: column;
-            align-items: center;
-            gap: 16px;
-            padding: 16px 0;
-        }
+        .qr-container { display: flex; flex-direction: column; align-items: center; gap: 16px; padding: 16px 0; }
         #qrcode { display: flex; justify-content: center; }
         .ton-address {
             background: var(--bg-secondary);
@@ -323,7 +306,6 @@
         }
         .min-amount { font-size: 12px; color: var(--text-muted); text-align: center; margin-top: 8px; }
 
-        /* Promo Code */
         .promo-input-group { display: flex; gap: 10px; margin-top: 12px; }
         .promo-input {
             flex: 1;
@@ -423,7 +405,7 @@
                 <div class="avatar-container" id="avatarContainer">
                     <div class="avatar-outer-glow">
                         <div class="avatar-inner">
-                            <img class="avatar" id="avatarImg" src="https://i.pravatar.cc/150?img=7" alt="Avatar">
+                            <img class="avatar" id="avatarImg" src="https://randomuser.me/api/portraits/men/1.jpg" alt="Avatar">
                         </div>
                     </div>
                     <div class="avatar-upload-hint" id="uploadHint">📷</div>
@@ -449,7 +431,6 @@
                 <button class="game-btn" data-game="darts">🎯 Дартс</button>
             </div>
 
-            <!-- Basketball Game -->
             <div class="game-container" id="basketballGame">
                 <div class="game-status waiting" id="basketballStatus">🏀 Сделайте ставку и бросайте мяч!</div>
                 <div class="video-container" id="basketballVideoContainer">
@@ -474,7 +455,6 @@
                 </div>
             </div>
 
-            <!-- Darts Game -->
             <div class="game-container" id="dartsGame" style="display: none;">
                 <div class="game-status waiting" id="dartsStatus">🎯 Сделайте ставку и метайте дротик!</div>
                 <div class="video-container" id="dartsVideoContainer">
@@ -501,7 +481,6 @@
         </main>
     </div>
 
-    <!-- Profile Page -->
     <div class="profile-page" id="profilePage">
         <div class="ios-card">
             <div class="card-header"><span>💰 Мой баланс</span><span>💎</span></div>
@@ -555,13 +534,11 @@
         <div style="height: 20px;"></div>
     </div>
 
-    <!-- Bottom Navigation -->
     <div class="bottom-nav">
         <div class="nav-item active" data-tab="game"><div class="nav-icon">🎮</div><div class="nav-label">Игры</div></div>
         <div class="nav-item" data-tab="profile"><div class="nav-icon">👤</div><div class="nav-label">Профиль</div></div>
     </div>
 
-    <!-- Modals -->
     <div class="modal" id="usernameModal">
         <div class="modal-content">
             <h3>👤 Изменить ник</h3>
@@ -599,7 +576,7 @@
             isPlaying: false,
             currentGame: 'basketball',
             username: 'Игрок',
-            avatarUrl: 'https://i.pravatar.cc/150?img=7',
+            avatarUrl: 'https://randomuser.me/api/portraits/men/1.jpg',
             totalBets: 0,
             totalWins: 0,
             totalLosses: 0,
@@ -612,16 +589,25 @@
             winStreakGames: 0
         };
 
+        // РАБОЧИЕ ССЫЛКИ НА GIF (используем разные источники)
         const gameConfigs = {
             basketball: {
                 name: 'Баскетбол', winChance: 0.45, winMultiplier: 2.0,
-                images: { waiting: 'https://i.ibb.co/rR5fhwKy/Ag-ADaw-YAAt6fs-Uc-gif.gif', win: 'https://i.ibb.co/KpdN2Fnm/222-1.gif', lose: 'https://i.ibb.co/wNtHVBQF/Ag-ADa-QYAAt6fs-Uc-gif.gif' },
+                images: {
+                    waiting: 'https://media.tenor.com/8N4I0j5Q5LkAAAAi/basketball-ball.gif',
+                    win: 'https://media.tenor.com/fE9MpC9qL5EAAAAi/basketball-score.gif',
+                    lose: 'https://media.tenor.com/YpHt9z3Dp3IAAAAi/basketball-miss.gif'
+                },
                 statusText: { waiting: '🏀 Сделайте ставку и бросайте мяч!', playing: '🏀 Мяч в полёте...', win: '🎉 ПОПАДАНИЕ! Вы выиграли!', lose: '💔 ПРОМАХ! Попробуйте ещё раз' },
                 buttonText: { idle: '🏀 Поставить и бросить', playing: '🎯 Бросаем...' }
             },
             darts: {
                 name: 'Дартс', winChance: 0.40, winMultiplier: 2.2,
-                images: { waiting: 'https://i.ibb.co/r2q6qLgb/image.gif', win: 'https://i.ibb.co/nvhtj6Q/image.gif', lose: 'https://i.ibb.co/ycWbkwJr/image.gif' },
+                images: {
+                    waiting: 'https://media.tenor.com/nR4xHV0Lh0wAAAAi/darts-throw.gif',
+                    win: 'https://media.tenor.com/Y54oN9WvFqQAAAAi/darts-bullseye.gif',
+                    lose: 'https://media.tenor.com/d7QxQVoQ0zQAAAAi/darts-miss.gif'
+                },
                 statusText: { waiting: '🎯 Сделайте ставку и метайте дротик!', playing: '🎯 Дротик в полёте...', win: '🎯 ТОЧНОЕ ПОПАДАНИЕ! Вы выиграли!', lose: '💔 ПРОМАХ! Попробуйте ещё раз' },
                 buttonText: { idle: '🎯 Поставить и метнуть', playing: '🎯 Метаем...' }
             }
@@ -637,7 +623,7 @@
                 const savedState = JSON.parse(saved);
                 gameState.balance = savedState.balance ?? 0.1;
                 gameState.username = savedState.username || 'Игрок';
-                gameState.avatarUrl = savedState.avatarUrl || 'https://i.pravatar.cc/150?img=7';
+                gameState.avatarUrl = savedState.avatarUrl || 'https://randomuser.me/api/portraits/men/1.jpg';
                 gameState.totalBets = savedState.totalBets || 0;
                 gameState.totalWins = savedState.totalWins || 0;
                 gameState.totalLosses = savedState.totalLosses || 0;
@@ -742,6 +728,7 @@
                 img.src = imageUrl;
                 img.onload = () => resolve();
                 img.onerror = () => reject();
+                setTimeout(() => resolve(), 2000);
             });
         }
 
@@ -832,7 +819,10 @@
                         resetGame(game, config);
                     }, 2000);
                 }, 3000);
-            } catch (error) { resetGame(game, config); }
+            } catch (error) { 
+                console.log('Game error:', error);
+                resetGame(game, config); 
+            }
         }
 
         function resetGame(game, config) {
@@ -871,21 +861,21 @@
                 profilePage.classList.add('show');
                 updateStatsDisplay();
                 updateReferralDisplay();
-                if (!qrGenerated) generateQR();
-            }
-        }
-
-        function generateQR() {
-            if (typeof QRCode !== 'undefined') {
-                new QRCode(document.getElementById("qrContainer"), {
-                    text: "UQA1HUaqG9VULmU4QoLwPHDxAY3F0g3RQFzBKtCX2mATU01p",
-                    width: 180,
-                    height: 180,
-                    colorDark: "#000000",
-                    colorLight: "#ffffff",
-                    correctLevel: QRCode.CorrectLevel.H
-                });
-                qrGenerated = true;
+                if (!qrGenerated) {
+                    setTimeout(() => {
+                        if (typeof QRCode !== 'undefined') {
+                            new QRCode(document.getElementById("qrContainer"), {
+                                text: "UQA1HUaqG9VULmU4QoLwPHDxAY3F0g3RQFzBKtCX2mATU01p",
+                                width: 180,
+                                height: 180,
+                                colorDark: "#000000",
+                                colorLight: "#ffffff",
+                                correctLevel: QRCode.CorrectLevel.H
+                            });
+                            qrGenerated = true;
+                        }
+                    }, 100);
+                }
             }
         }
 
@@ -993,6 +983,7 @@
             try {
                 await changeImage('basketball', gameConfigs.basketball.images.waiting);
                 await changeImage('darts', gameConfigs.darts.images.waiting);
+                console.log('Games initialized with GIFs from tenor.com');
             } catch (error) { console.error(error); }
         }
         
