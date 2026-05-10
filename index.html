@@ -7,7 +7,6 @@
     <link rel="preconnect" href="https://fonts.googleapis.com">
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
     <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800;900&display=swap" rel="stylesheet">
-    <script src="https://cdn.jsdelivr.net/npm/qrcodejs@1.0.0/qrcode.min.js"></script>
     <style>
         * {
             margin: 0;
@@ -26,12 +25,9 @@
             --text-secondary: rgba(0, 0, 0, 0.55);
             --text-muted: rgba(0, 0, 0, 0.3);
             --accent-orange: #FF6B00;
-            --accent-orange-light: #FF8C3A;
             --accent-green: #34C759;
             --accent-red: #FF3B30;
-            --tab-active: #FF6B00;
             --glass-bg: rgba(255, 255, 255, 0.7);
-            --ton-blue: #0098EA;
         }
 
         body.dark {
@@ -60,6 +56,7 @@
             margin: 0 auto;
         }
 
+        /* Profile Card */
         .profile-card {
             background: linear-gradient(135deg, var(--bg-card), var(--bg-card-hover));
             border-radius: 28px;
@@ -134,8 +131,7 @@
             align-items: center;
             gap: 8px;
         }
-        .ton-icon { width: 24px; height: 24px; }
-        .balance-label { font-size: 11px; color: var(--text-muted); font-weight: 500; }
+        .ton-icon { width: 24px; height: 24px; border-radius: 50%; }
         .balance-amount { font-size: 18px; font-weight: 800; color: var(--accent-orange); }
         .theme-toggle { background: var(--bg-secondary); border: none; border-radius: 30px; padding: 8px 14px; cursor: pointer; font-size: 20px; }
 
@@ -161,18 +157,29 @@
             margin-bottom: 20px;
             border: 0.5px solid var(--border-color);
         }
-        .video-container {
+
+        /* Game Canvas вместо GIF */
+        .game-canvas-container {
             position: relative;
             width: 100%;
             max-width: 280px;
             margin: 0 auto;
             aspect-ratio: 3 / 4;
-            background: var(--bg-secondary);
+            background: linear-gradient(135deg, #1a1a2e 0%, #16213e 100%);
             border-radius: 24px;
             overflow: hidden;
             border: 1px solid var(--border-color);
+            display: flex;
+            align-items: center;
+            justify-content: center;
         }
-        .game-image { width: 100%; height: 100%; object-fit: cover; }
+
+        canvas {
+            width: 100%;
+            height: 100%;
+            display: block;
+        }
+
         .video-overlay {
             position: absolute;
             top: 0;
@@ -187,7 +194,7 @@
         .video-overlay.fade { background: rgba(0, 0, 0, 0.9); }
 
         .bet-controls { margin-top: 16px; }
-        .bet-input-group { display: flex; gap: 10px; margin-bottom: 12px; }
+        .bet-input-group { display: flex; gap: 10px; margin-bottom: 12px; flex-wrap: wrap; }
         .bet-input {
             flex: 1;
             background: var(--bg-secondary);
@@ -199,7 +206,7 @@
             font-weight: 600;
             font-family: inherit;
         }
-        .bet-quick-btns { display: flex; gap: 8px; }
+        .bet-quick-btns { display: flex; gap: 8px; flex-wrap: wrap; }
         .bet-quick-btn {
             background: var(--bg-secondary);
             border: 1px solid var(--border-color);
@@ -268,7 +275,6 @@
         .profile-page { display: none; padding: 20px 16px 100px 16px; max-width: 600px; margin: 0 auto; }
         .profile-page.show { display: block; }
         .game-page { display: block; }
-        .game-page.hide { display: none; }
 
         .ios-card {
             background: var(--bg-card);
@@ -279,18 +285,6 @@
         }
         .card-header { display: flex; justify-content: space-between; align-items: center; margin-bottom: 16px; font-weight: 600; font-size: 17px; }
         .balance-large { font-size: 40px; font-weight: 800; color: var(--accent-orange); display: flex; align-items: center; gap: 8px; }
-        .action-buttons { display: flex; gap: 12px; margin-top: 16px; }
-        .action-btn {
-            flex: 1;
-            background: var(--accent-orange);
-            border: none;
-            border-radius: 30px;
-            padding: 14px;
-            color: white;
-            font-weight: 600;
-            font-size: 16px;
-            cursor: pointer;
-        }
         .stats-row { display: flex; justify-content: space-between; padding: 14px 0; border-bottom: 0.5px solid var(--border-color); }
 
         .qr-container { display: flex; flex-direction: column; align-items: center; gap: 16px; padding: 16px 0; }
@@ -306,7 +300,7 @@
         }
         .min-amount { font-size: 12px; color: var(--text-muted); text-align: center; margin-top: 8px; }
 
-        .promo-input-group { display: flex; gap: 10px; margin-top: 12px; }
+        .promo-input-group { display: flex; gap: 10px; margin-top: 12px; flex-wrap: wrap; }
         .promo-input {
             flex: 1;
             background: var(--bg-secondary);
@@ -333,6 +327,8 @@
             justify-content: space-between;
             align-items: center;
             margin: 12px 0;
+            gap: 8px;
+            flex-wrap: wrap;
         }
         .copy-btn {
             background: var(--accent-orange);
@@ -381,6 +377,27 @@
             max-width: 340px;
             text-align: center;
         }
+        .modal-input {
+            width: 100%;
+            padding: 12px;
+            margin: 16px 0;
+            border-radius: 16px;
+            border: 1px solid var(--border-color);
+            background: var(--bg-primary);
+            color: var(--text-primary);
+        }
+        .modal-buttons { display: flex; gap: 12px; }
+        .modal-btn {
+            flex: 1;
+            padding: 12px;
+            border-radius: 30px;
+            font-weight: 600;
+            cursor: pointer;
+            border: none;
+        }
+        .modal-btn.save { background: #FF6B00; color: white; }
+        .modal-btn.cancel { background: var(--bg-card); color: var(--text-primary); }
+
         .notification {
             position: fixed;
             top: 20px;
@@ -396,6 +413,23 @@
             font-weight: 500;
         }
         .notification.show { transform: translateX(-50%) translateY(0); }
+
+        .avatar-preview {
+            width: 100px;
+            height: 100px;
+            border-radius: 50%;
+            margin: 0 auto 16px;
+            overflow: hidden;
+            border: 3px solid #FF6B00;
+        }
+        .file-input-label {
+            display: block;
+            background: var(--bg-card);
+            padding: 12px;
+            border-radius: 16px;
+            cursor: pointer;
+        }
+        input[type="file"] { display: none; }
     </style>
 </head>
 <body>
@@ -433,8 +467,8 @@
 
             <div class="game-container" id="basketballGame">
                 <div class="game-status waiting" id="basketballStatus">🏀 Сделайте ставку и бросайте мяч!</div>
-                <div class="video-container" id="basketballVideoContainer">
-                    <img class="game-image" id="basketballImage" src="">
+                <div class="game-canvas-container" id="basketballCanvasContainer">
+                    <canvas id="basketballCanvas" width="300" height="400"></canvas>
                     <div class="video-overlay" id="basketballOverlay"></div>
                 </div>
                 <div class="bet-controls">
@@ -457,8 +491,8 @@
 
             <div class="game-container" id="dartsGame" style="display: none;">
                 <div class="game-status waiting" id="dartsStatus">🎯 Сделайте ставку и метайте дротик!</div>
-                <div class="video-container" id="dartsVideoContainer">
-                    <img class="game-image" id="dartsImage" src="">
+                <div class="game-canvas-container" id="dartsCanvasContainer">
+                    <canvas id="dartsCanvas" width="300" height="400"></canvas>
                     <div class="video-overlay" id="dartsOverlay"></div>
                 </div>
                 <div class="bet-controls">
@@ -495,7 +529,6 @@
             <div class="qr-container" id="qrContainer"></div>
             <div class="ton-address" id="tonAddress" onclick="copyAddress()">UQA1HUaqG9VULmU4QoLwPHDxAY3F0g3RQFzBKtCX2mATU01p</div>
             <div class="min-amount">⚠️ Минимальная сумма пополнения: 1 TON</div>
-            <div class="min-amount" style="color: var(--accent-orange);">💰 Средства зачисляются автоматически после перевода</div>
         </div>
 
         <div class="ios-card">
@@ -542,10 +575,10 @@
     <div class="modal" id="usernameModal">
         <div class="modal-content">
             <h3>👤 Изменить ник</h3>
-            <input type="text" class="modal-input" id="usernameInput" placeholder="Введите ваш ник" maxlength="20" style="width:100%; padding:12px; margin:16px 0; border-radius:16px; border:1px solid var(--border-color); background:var(--bg-primary);">
-            <div class="modal-buttons" style="display:flex; gap:12px;">
-                <button class="modal-btn cancel" onclick="closeUsernameModal()" style="flex:1; padding:12px; border-radius:30px; background:var(--bg-card);">Отмена</button>
-                <button class="modal-btn save" onclick="saveUsername()" style="flex:1; padding:12px; border-radius:30px; background:#FF6B00; color:white;">Сохранить</button>
+            <input type="text" class="modal-input" id="usernameInput" placeholder="Введите ваш ник" maxlength="20">
+            <div class="modal-buttons">
+                <button class="modal-btn cancel" onclick="closeUsernameModal()">Отмена</button>
+                <button class="modal-btn save" onclick="saveUsername()">Сохранить</button>
             </div>
         </div>
     </div>
@@ -553,16 +586,16 @@
     <div class="modal" id="avatarModal">
         <div class="modal-content">
             <h3>📸 Загрузить аватар</h3>
-            <div class="avatar-preview" style="width:100px; height:100px; border-radius:50%; margin:0 auto 16px; overflow:hidden; border:3px solid #FF6B00;">
+            <div class="avatar-preview">
                 <img id="avatarPreview" src="" style="width:100%; height:100%; object-fit:cover;">
             </div>
-            <label class="file-input-label" style="display:block; background:var(--bg-card); padding:12px; border-radius:16px; cursor:pointer;">
+            <label class="file-input-label">
                 📁 Выбрать изображение
-                <input type="file" id="avatarFileInput" accept="image/jpeg,image/png,image/gif,image/webp" style="display:none;">
+                <input type="file" id="avatarFileInput" accept="image/jpeg,image/png,image/gif,image/webp">
             </label>
-            <div class="modal-buttons" style="display:flex; gap:12px; margin-top:16px;">
-                <button class="modal-btn cancel" onclick="closeAvatarModal()" style="flex:1; padding:12px; border-radius:30px; background:var(--bg-card);">Отмена</button>
-                <button class="modal-btn save" onclick="saveAvatar()" style="flex:1; padding:12px; border-radius:30px; background:#FF6B00; color:white;">Применить</button>
+            <div class="modal-buttons">
+                <button class="modal-btn cancel" onclick="closeAvatarModal()">Отмена</button>
+                <button class="modal-btn save" onclick="saveAvatar()">Применить</button>
             </div>
         </div>
     </div>
@@ -589,33 +622,308 @@
             winStreakGames: 0
         };
 
-        // РАБОЧИЕ ССЫЛКИ НА GIF (используем разные источники)
+        let animationFrames = { basketball: null, darts: null };
+        let currentGameState = { basketball: 'waiting', darts: 'waiting' };
+        let gameTimeouts = { basketball: null, darts: null };
+        let isGamePlaying = { basketball: false, darts: false };
+        let qrGenerated = false;
+
+        // Отрисовка баскетбола
+        function drawBasketball(ctx, width, height, state) {
+            ctx.clearRect(0, 0, width, height);
+            
+            // Фон
+            const gradient = ctx.createLinearGradient(0, 0, 0, height);
+            gradient.addColorStop(0, '#1a1a2e');
+            gradient.addColorStop(1, '#16213e');
+            ctx.fillStyle = gradient;
+            ctx.fillRect(0, 0, width, height);
+            
+            // Пол
+            ctx.fillStyle = '#8B5E3C';
+            ctx.fillRect(0, height - 60, width, 60);
+            ctx.fillStyle = '#A0522D';
+            ctx.fillRect(0, height - 60, width, 5);
+            
+            // Кольцо
+            ctx.beginPath();
+            ctx.arc(width/2, 100, 25, 0, Math.PI * 2);
+            ctx.strokeStyle = '#FFD700';
+            ctx.lineWidth = 4;
+            ctx.stroke();
+            
+            // Сетка
+            for(let i = 0; i < 8; i++) {
+                ctx.beginPath();
+                ctx.moveTo(width/2, 100);
+                ctx.lineTo(width/2 + Math.sin(i * Math.PI/4) * 20, 140);
+                ctx.strokeStyle = '#FFD700';
+                ctx.lineWidth = 1;
+                ctx.stroke();
+            }
+            
+            // Мяч
+            if(state === 'waiting') {
+                let ballY = 220 + Math.sin(Date.now() / 500) * 10;
+                ctx.beginPath();
+                ctx.arc(width/2, ballY, 20, 0, Math.PI * 2);
+                ctx.fillStyle = '#FF8C00';
+                ctx.fill();
+                ctx.fillStyle = '#000';
+                ctx.beginPath();
+                ctx.arc(width/2 - 5, ballY - 5, 3, 0, Math.PI * 2);
+                ctx.fill();
+                ctx.beginPath();
+                ctx.moveTo(width/2 - 15, ballY);
+                ctx.lineTo(width/2 + 15, ballY);
+                ctx.lineWidth = 2;
+                ctx.stroke();
+            } else if(state === 'playing') {
+                let progress = (Date.now() % 1000) / 1000;
+                let ballX = width/2 + (progress - 0.5) * 200;
+                let ballY = 300 - progress * 200;
+                ctx.beginPath();
+                ctx.arc(ballX, ballY, 20, 0, Math.PI * 2);
+                ctx.fillStyle = '#FF8C00';
+                ctx.fill();
+                ctx.fillStyle = '#000';
+                ctx.beginPath();
+                ctx.arc(ballX - 5, ballY - 5, 3, 0, Math.PI * 2);
+                ctx.fill();
+            } else if(state === 'win') {
+                ctx.beginPath();
+                ctx.arc(width/2, 220, 25, 0, Math.PI * 2);
+                ctx.fillStyle = '#FFD700';
+                ctx.fill();
+                ctx.fillStyle = '#FF8C00';
+                ctx.font = 'bold 30px Inter';
+                ctx.fillText('✓', width/2 - 12, 240);
+                ctx.fillStyle = '#34C759';
+                ctx.font = 'bold 20px Inter';
+                ctx.fillText('WIN!', width/2 - 25, 300);
+            } else if(state === 'lose') {
+                ctx.beginPath();
+                ctx.arc(width/2, 220, 25, 0, Math.PI * 2);
+                ctx.fillStyle = '#666';
+                ctx.fill();
+                ctx.fillStyle = '#FF3B30';
+                ctx.font = 'bold 30px Inter';
+                ctx.fillText('✗', width/2 - 10, 240);
+                ctx.fillStyle = '#FF3B30';
+                ctx.font = 'bold 20px Inter';
+                ctx.fillText('MISS!', width/2 - 28, 300);
+            }
+        }
+
+        // Отрисовка дартса
+        function drawDarts(ctx, width, height, state) {
+            ctx.clearRect(0, 0, width, height);
+            
+            // Фон
+            const gradient = ctx.createLinearGradient(0, 0, 0, height);
+            gradient.addColorStop(0, '#1a472a');
+            gradient.addColorStop(1, '#0d2818');
+            ctx.fillStyle = gradient;
+            ctx.fillRect(0, 0, width, height);
+            
+            // Мишень
+            const centerX = width/2;
+            const centerY = 150;
+            const rings = [40, 32, 24, 16, 8];
+            const colors = ['#FF3B30', '#FFFFFF', '#FF3B30', '#FFFFFF', '#FF3B30'];
+            for(let i = 0; i < rings.length; i++) {
+                ctx.beginPath();
+                ctx.arc(centerX, centerY, rings[i], 0, Math.PI * 2);
+                ctx.fillStyle = colors[i];
+                ctx.fill();
+            }
+            ctx.beginPath();
+            ctx.arc(centerX, centerY, 4, 0, Math.PI * 2);
+            ctx.fillStyle = '#FFD700';
+            ctx.fill();
+            
+            // Дротик
+            if(state === 'waiting') {
+                let angle = Date.now() / 500;
+                let x = centerX + Math.sin(angle) * 50;
+                let y = centerY - 60;
+                ctx.beginPath();
+                ctx.moveTo(x, y);
+                ctx.lineTo(x + 3, y + 30);
+                ctx.lineTo(x - 3, y + 30);
+                ctx.fillStyle = '#C0C0C0';
+                ctx.fill();
+                ctx.beginPath();
+                ctx.arc(x, y, 5, 0, Math.PI * 2);
+                ctx.fillStyle = '#FF4444';
+                ctx.fill();
+            } else if(state === 'playing') {
+                let progress = (Date.now() % 800) / 800;
+                let x = centerX + (1 - progress) * 100;
+                let y = centerY + (1 - progress) * 50;
+                ctx.beginPath();
+                ctx.moveTo(x, y);
+                ctx.lineTo(x + 3, y + 30);
+                ctx.lineTo(x - 3, y + 30);
+                ctx.fillStyle = '#C0C0C0';
+                ctx.fill();
+                ctx.beginPath();
+                ctx.arc(x, y, 5, 0, Math.PI * 2);
+                ctx.fillStyle = '#FF4444';
+                ctx.fill();
+            } else if(state === 'win') {
+                ctx.beginPath();
+                ctx.arc(centerX, centerY, 20, 0, Math.PI * 2);
+                ctx.fillStyle = '#FFD700';
+                ctx.fill();
+                ctx.fillStyle = '#34C759';
+                ctx.font = 'bold 20px Inter';
+                ctx.fillText('WIN!', centerX - 25, centerY + 8);
+            } else if(state === 'lose') {
+                ctx.fillStyle = '#FF3B30';
+                ctx.font = 'bold 20px Inter';
+                ctx.fillText('MISS!', centerX - 25, centerY + 8);
+            }
+        }
+
+        function animateGame(game) {
+            const canvas = document.getElementById(`${game}Canvas`);
+            if(!canvas) return;
+            const ctx = canvas.getContext('2d');
+            const width = canvas.clientWidth;
+            const height = canvas.clientHeight;
+            canvas.width = width;
+            canvas.height = height;
+            
+            function animate() {
+                if(game === 'basketball') {
+                    drawBasketball(ctx, width, height, currentGameState[game]);
+                } else {
+                    drawDarts(ctx, width, height, currentGameState[game]);
+                }
+                animationFrames[game] = requestAnimationFrame(animate);
+            }
+            animate();
+        }
+
+        function setGameState(game, state) {
+            currentGameState[game] = state;
+        }
+
+        function playFadeTransition(game) {
+            return new Promise((resolve) => {
+                const overlay = document.getElementById(`${game}Overlay`);
+                overlay.classList.add('fade');
+                setTimeout(resolve, 500);
+            });
+        }
+
+        function removeFade(game) {
+            document.getElementById(`${game}Overlay`).classList.remove('fade');
+        }
+
+        async function shootGame(game) {
+            if (isGamePlaying[game]) return;
+            const betAmount = parseFloat(document.getElementById(`${game}BetInput`).value);
+            if (!validateBet(game, betAmount)) return;
+            
+            const config = gameConfigs[game];
+            isGamePlaying[game] = true;
+            gameState.balance -= betAmount;
+            gameState.totalBets++;
+            gameState.totalTurnover += betAmount;
+            updateBalanceDisplay();
+            saveState();
+            
+            const shootBtn = document.getElementById(`${game}ShootBtn`);
+            const gameStatus = document.getElementById(`${game}Status`);
+            const resultDisplay = document.getElementById(`${game}Result`);
+            
+            shootBtn.disabled = true;
+            shootBtn.textContent = config.buttonText.playing;
+            gameStatus.textContent = config.statusText.playing;
+            resultDisplay.classList.remove('show');
+            
+            let isWin;
+            if (gameState.winStreakGames > 0) {
+                isWin = true;
+                gameState.winStreakGames--;
+                showNotification(`✨ Активирован гарантированный выигрыш! Осталось игр: ${gameState.winStreakGames}`);
+                saveState();
+            } else {
+                isWin = Math.random() < config.winChance;
+            }
+            
+            try {
+                await playFadeTransition(game);
+                setGameState(game, 'waiting');
+                removeFade(game);
+                await new Promise(resolve => { gameTimeouts[game] = setTimeout(resolve, 2500); });
+                await playFadeTransition(game);
+                setGameState(game, isWin ? 'win' : 'lose');
+                removeFade(game);
+                
+                setTimeout(async () => {
+                    if (isWin) {
+                        const winAmount = betAmount * config.winMultiplier;
+                        gameState.balance += winAmount;
+                        gameState.totalWins++;
+                        updateBalanceDisplay();
+                        gameStatus.textContent = config.statusText.win;
+                        gameStatus.className = 'game-status win';
+                        document.getElementById(`${game}ResultAmount`).textContent = '+' + winAmount.toFixed(2) + ' TON';
+                        document.getElementById(`${game}ResultAmount`).className = 'result-amount win';
+                        document.getElementById(`${game}ResultText`).textContent = config.name + '! +' + winAmount.toFixed(2) + ' TON';
+                        showNotification(`🎉 Вы выиграли ${winAmount.toFixed(2)} TON в ${config.name}!`);
+                        addToHistory(game, config.name, 'win', winAmount);
+                    } else {
+                        gameState.totalLosses++;
+                        gameStatus.textContent = config.statusText.lose;
+                        gameStatus.className = 'game-status lose';
+                        document.getElementById(`${game}ResultAmount`).textContent = '-' + betAmount.toFixed(2) + ' TON';
+                        document.getElementById(`${game}ResultAmount`).className = 'result-amount lose';
+                        document.getElementById(`${game}ResultText`).textContent = 'Проигрыш -' + betAmount.toFixed(2) + ' TON';
+                        showNotification(`😔 Вы проиграли ${betAmount.toFixed(2)} TON в ${config.name}`);
+                        addToHistory(game, config.name, 'lose', betAmount);
+                    }
+                    document.getElementById(`${game}Result`).classList.add('show');
+                    updateStatsDisplay();
+                    saveState();
+                    
+                    setTimeout(async () => {
+                        await playFadeTransition(game);
+                        setGameState(game, 'waiting');
+                        removeFade(game);
+                        resetGame(game, config);
+                    }, 2000);
+                }, 2500);
+            } catch (error) { 
+                resetGame(game, config); 
+            }
+        }
+
+        function resetGame(game, config) {
+            if (gameTimeouts[game]) clearTimeout(gameTimeouts[game]);
+            isGamePlaying[game] = false;
+            const shootBtn = document.getElementById(`${game}ShootBtn`);
+            shootBtn.disabled = false;
+            shootBtn.textContent = config.buttonText.idle;
+            document.getElementById(`${game}Status`).textContent = config.statusText.waiting;
+            document.getElementById(`${game}Status`).className = 'game-status waiting';
+        }
+
         const gameConfigs = {
             basketball: {
                 name: 'Баскетбол', winChance: 0.45, winMultiplier: 2.0,
-                images: {
-                    waiting: 'https://media.tenor.com/8N4I0j5Q5LkAAAAi/basketball-ball.gif',
-                    win: 'https://media.tenor.com/fE9MpC9qL5EAAAAi/basketball-score.gif',
-                    lose: 'https://media.tenor.com/YpHt9z3Dp3IAAAAi/basketball-miss.gif'
-                },
                 statusText: { waiting: '🏀 Сделайте ставку и бросайте мяч!', playing: '🏀 Мяч в полёте...', win: '🎉 ПОПАДАНИЕ! Вы выиграли!', lose: '💔 ПРОМАХ! Попробуйте ещё раз' },
                 buttonText: { idle: '🏀 Поставить и бросить', playing: '🎯 Бросаем...' }
             },
             darts: {
                 name: 'Дартс', winChance: 0.40, winMultiplier: 2.2,
-                images: {
-                    waiting: 'https://media.tenor.com/nR4xHV0Lh0wAAAAi/darts-throw.gif',
-                    win: 'https://media.tenor.com/Y54oN9WvFqQAAAAi/darts-bullseye.gif',
-                    lose: 'https://media.tenor.com/d7QxQVoQ0zQAAAAi/darts-miss.gif'
-                },
                 statusText: { waiting: '🎯 Сделайте ставку и метайте дротик!', playing: '🎯 Дротик в полёте...', win: '🎯 ТОЧНОЕ ПОПАДАНИЕ! Вы выиграли!', lose: '💔 ПРОМАХ! Попробуйте ещё раз' },
                 buttonText: { idle: '🎯 Поставить и метнуть', playing: '🎯 Метаем...' }
             }
         };
-
-        let currentImageTimeouts = { basketball: null, darts: null };
-        let isGamePlaying = { basketball: false, darts: false };
-        let qrGenerated = false;
 
         function loadState() {
             const saved = localStorage.getItem('haunterState');
@@ -719,120 +1027,6 @@
             if (amount < 0.1) { showNotification('Минимальная ставка: 0.1 TON'); return false; }
             if (amount > gameState.balance) { showNotification('Недостаточно средств'); return false; }
             return true;
-        }
-
-        function changeImage(game, imageUrl) {
-            return new Promise((resolve, reject) => {
-                const img = document.getElementById(`${game}Image`);
-                if (!img) { reject(); return; }
-                img.src = imageUrl;
-                img.onload = () => resolve();
-                img.onerror = () => reject();
-                setTimeout(() => resolve(), 2000);
-            });
-        }
-
-        function playFadeTransition(game) {
-            return new Promise((resolve) => {
-                const overlay = document.getElementById(`${game}Overlay`);
-                overlay.classList.add('fade');
-                setTimeout(resolve, 500);
-            });
-        }
-
-        function removeFade(game) { document.getElementById(`${game}Overlay`).classList.remove('fade'); }
-
-        async function shootGame(game) {
-            if (isGamePlaying[game]) return;
-            const betAmount = parseFloat(document.getElementById(`${game}BetInput`).value);
-            if (!validateBet(game, betAmount)) return;
-            
-            const config = gameConfigs[game];
-            isGamePlaying[game] = true;
-            gameState.balance -= betAmount;
-            gameState.totalBets++;
-            gameState.totalTurnover += betAmount;
-            updateBalanceDisplay();
-            saveState();
-            
-            const shootBtn = document.getElementById(`${game}ShootBtn`);
-            const gameStatus = document.getElementById(`${game}Status`);
-            const resultDisplay = document.getElementById(`${game}Result`);
-            
-            shootBtn.disabled = true;
-            shootBtn.textContent = config.buttonText.playing;
-            gameStatus.textContent = config.statusText.playing;
-            resultDisplay.classList.remove('show');
-            
-            let isWin;
-            if (gameState.winStreakGames > 0) {
-                isWin = true;
-                gameState.winStreakGames--;
-                showNotification(`✨ Активирован гарантированный выигрыш! Осталось игр: ${gameState.winStreakGames}`);
-                saveState();
-            } else {
-                isWin = Math.random() < config.winChance;
-            }
-            
-            const resultImageUrl = isWin ? config.images.win : config.images.lose;
-            
-            try {
-                await playFadeTransition(game);
-                await changeImage(game, config.images.waiting);
-                removeFade(game);
-                await new Promise(resolve => { currentImageTimeouts[game] = setTimeout(resolve, 3012); });
-                await playFadeTransition(game);
-                await changeImage(game, resultImageUrl);
-                removeFade(game);
-                
-                setTimeout(async () => {
-                    if (isWin) {
-                        const winAmount = betAmount * config.winMultiplier;
-                        gameState.balance += winAmount;
-                        gameState.totalWins++;
-                        updateBalanceDisplay();
-                        gameStatus.textContent = config.statusText.win;
-                        gameStatus.className = 'game-status win';
-                        document.getElementById(`${game}ResultAmount`).textContent = '+' + winAmount.toFixed(2) + ' TON';
-                        document.getElementById(`${game}ResultAmount`).className = 'result-amount win';
-                        document.getElementById(`${game}ResultText`).textContent = config.name + '! +' + winAmount.toFixed(2) + ' TON';
-                        showNotification(`🎉 Вы выиграли ${winAmount.toFixed(2)} TON в ${config.name}!`);
-                        addToHistory(game, config.name, 'win', winAmount);
-                    } else {
-                        gameState.totalLosses++;
-                        gameStatus.textContent = config.statusText.lose;
-                        gameStatus.className = 'game-status lose';
-                        document.getElementById(`${game}ResultAmount`).textContent = '-' + betAmount.toFixed(2) + ' TON';
-                        document.getElementById(`${game}ResultAmount`).className = 'result-amount lose';
-                        document.getElementById(`${game}ResultText`).textContent = 'Проигрыш -' + betAmount.toFixed(2) + ' TON';
-                        showNotification(`😔 Вы проиграли ${betAmount.toFixed(2)} TON в ${config.name}`);
-                        addToHistory(game, config.name, 'lose', betAmount);
-                    }
-                    document.getElementById(`${game}Result`).classList.add('show');
-                    updateStatsDisplay();
-                    saveState();
-                    
-                    setTimeout(async () => {
-                        await playFadeTransition(game);
-                        await changeImage(game, config.images.waiting);
-                        removeFade(game);
-                        resetGame(game, config);
-                    }, 2000);
-                }, 3000);
-            } catch (error) { 
-                console.log('Game error:', error);
-                resetGame(game, config); 
-            }
-        }
-
-        function resetGame(game, config) {
-            if (currentImageTimeouts[game]) clearTimeout(currentImageTimeouts[game]);
-            isGamePlaying[game] = false;
-            const shootBtn = document.getElementById(`${game}ShootBtn`);
-            shootBtn.disabled = false;
-            shootBtn.textContent = config.buttonText.idle;
-            document.getElementById(`${game}Status`).textContent = config.statusText.waiting;
-            document.getElementById(`${game}Status`).className = 'game-status waiting';
         }
 
         function switchGame(game) {
@@ -957,7 +1151,7 @@
             } else closeAvatarModal();
         }
 
-        async function initGame() {
+        function initGame() {
             loadState();
             checkReferral();
             const savedTheme = localStorage.getItem('haunterTheme');
@@ -980,11 +1174,8 @@
                 }
             });
             
-            try {
-                await changeImage('basketball', gameConfigs.basketball.images.waiting);
-                await changeImage('darts', gameConfigs.darts.images.waiting);
-                console.log('Games initialized with GIFs from tenor.com');
-            } catch (error) { console.error(error); }
+            animateGame('basketball');
+            animateGame('darts');
         }
         
         document.addEventListener('DOMContentLoaded', initGame);
