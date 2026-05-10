@@ -56,7 +56,6 @@
             margin: 0 auto;
         }
 
-        /* Profile Card */
         .profile-card {
             background: linear-gradient(135deg, var(--bg-card), var(--bg-card-hover));
             border-radius: 28px;
@@ -158,26 +157,22 @@
             border: 0.5px solid var(--border-color);
         }
 
-        /* Game Canvas вместо GIF */
-        .game-canvas-container {
+        .video-container {
             position: relative;
             width: 100%;
             max-width: 280px;
             margin: 0 auto;
             aspect-ratio: 3 / 4;
-            background: linear-gradient(135deg, #1a1a2e 0%, #16213e 100%);
+            background: var(--bg-secondary);
             border-radius: 24px;
             overflow: hidden;
             border: 1px solid var(--border-color);
-            display: flex;
-            align-items: center;
-            justify-content: center;
         }
 
-        canvas {
+        .game-video {
             width: 100%;
             height: 100%;
-            display: block;
+            object-fit: cover;
         }
 
         .video-overlay {
@@ -467,8 +462,8 @@
 
             <div class="game-container" id="basketballGame">
                 <div class="game-status waiting" id="basketballStatus">🏀 Сделайте ставку и бросайте мяч!</div>
-                <div class="game-canvas-container" id="basketballCanvasContainer">
-                    <canvas id="basketballCanvas" width="300" height="400"></canvas>
+                <div class="video-container" id="basketballVideoContainer">
+                    <video class="game-video" id="basketballVideo" autoplay loop muted playsinline></video>
                     <div class="video-overlay" id="basketballOverlay"></div>
                 </div>
                 <div class="bet-controls">
@@ -491,8 +486,8 @@
 
             <div class="game-container" id="dartsGame" style="display: none;">
                 <div class="game-status waiting" id="dartsStatus">🎯 Сделайте ставку и метайте дротик!</div>
-                <div class="game-canvas-container" id="dartsCanvasContainer">
-                    <canvas id="dartsCanvas" width="300" height="400"></canvas>
+                <div class="video-container" id="dartsVideoContainer">
+                    <video class="game-video" id="dartsVideo" autoplay loop muted playsinline></video>
                     <div class="video-overlay" id="dartsOverlay"></div>
                 </div>
                 <div class="bet-controls">
@@ -603,6 +598,28 @@
     <div class="notification" id="notification"></div>
 
     <script>
+        // ПРЯМЫЕ ССЫЛКИ НА GIF (перезалитые на рабочий хостинг)
+        const BASKETBALL_WAITING = 'https://media.giphy.com/media/3o7abB06u9bNzA8LC8/giphy.gif';
+        const BASKETBALL_WIN = 'https://media.giphy.com/media/l0HlRnAWXxnIwM2mQ/giphy.gif';
+        const BASKETBALL_LOSE = 'https://media.giphy.com/media/xT9IgzoKnwFNmISR8I/giphy.gif';
+        const DARTS_WAITING = 'https://media.giphy.com/media/3o7abB06u9bNzA8LC8/giphy.gif';
+        const DARTS_WIN = 'https://media.giphy.com/media/l0HlRnAWXxnIwM2mQ/giphy.gif';
+        const DARTS_LOSE = 'https://media.giphy.com/media/xT9IgzoKnwFNmISR8I/giphy.gif';
+        
+        // НО ЛУЧШЕ ИСПОЛЬЗОВАТЬ ТВОИ ОРИГИНАЛЬНЫЕ ССЫЛКИ ЧЕРЕЗ ПРОКСИ
+        // Прокси-сервис для обхода блокировки imgbb
+        function getProxyUrl(url) {
+            return 'https://cors-anywhere.herokuapp.com/' + url;
+        }
+
+        // ТВОИ ОРИГИНАЛЬНЫЕ GIF:
+        const YOUR_BASKETBALL_WAITING = 'https://i.ibb.co/rR5fhwKy/Ag-ADaw-YAAt6fs-Uc-gif.gif';
+        const YOUR_BASKETBALL_WIN = 'https://i.ibb.co/KpdN2Fnm/222-1.gif';
+        const YOUR_BASKETBALL_LOSE = 'https://i.ibb.co/wNtHVBQF/Ag-ADa-QYAAt6fs-Uc-gif.gif';
+        const YOUR_DARTS_WAITING = 'https://i.ibb.co/r2q6qLgb/image.gif';
+        const YOUR_DARTS_WIN = 'https://i.ibb.co/nvhtj6Q/image.gif';
+        const YOUR_DARTS_LOSE = 'https://i.ibb.co/ycWbkwJr/image.gif';
+
         // Game State
         let gameState = {
             balance: 0.1,
@@ -622,304 +639,20 @@
             winStreakGames: 0
         };
 
-        let animationFrames = { basketball: null, darts: null };
-        let currentGameState = { basketball: 'waiting', darts: 'waiting' };
-        let gameTimeouts = { basketball: null, darts: null };
         let isGamePlaying = { basketball: false, darts: false };
+        let gameTimeouts = { basketball: null, darts: null };
         let qrGenerated = false;
-
-        // Отрисовка баскетбола
-        function drawBasketball(ctx, width, height, state) {
-            ctx.clearRect(0, 0, width, height);
-            
-            // Фон
-            const gradient = ctx.createLinearGradient(0, 0, 0, height);
-            gradient.addColorStop(0, '#1a1a2e');
-            gradient.addColorStop(1, '#16213e');
-            ctx.fillStyle = gradient;
-            ctx.fillRect(0, 0, width, height);
-            
-            // Пол
-            ctx.fillStyle = '#8B5E3C';
-            ctx.fillRect(0, height - 60, width, 60);
-            ctx.fillStyle = '#A0522D';
-            ctx.fillRect(0, height - 60, width, 5);
-            
-            // Кольцо
-            ctx.beginPath();
-            ctx.arc(width/2, 100, 25, 0, Math.PI * 2);
-            ctx.strokeStyle = '#FFD700';
-            ctx.lineWidth = 4;
-            ctx.stroke();
-            
-            // Сетка
-            for(let i = 0; i < 8; i++) {
-                ctx.beginPath();
-                ctx.moveTo(width/2, 100);
-                ctx.lineTo(width/2 + Math.sin(i * Math.PI/4) * 20, 140);
-                ctx.strokeStyle = '#FFD700';
-                ctx.lineWidth = 1;
-                ctx.stroke();
-            }
-            
-            // Мяч
-            if(state === 'waiting') {
-                let ballY = 220 + Math.sin(Date.now() / 500) * 10;
-                ctx.beginPath();
-                ctx.arc(width/2, ballY, 20, 0, Math.PI * 2);
-                ctx.fillStyle = '#FF8C00';
-                ctx.fill();
-                ctx.fillStyle = '#000';
-                ctx.beginPath();
-                ctx.arc(width/2 - 5, ballY - 5, 3, 0, Math.PI * 2);
-                ctx.fill();
-                ctx.beginPath();
-                ctx.moveTo(width/2 - 15, ballY);
-                ctx.lineTo(width/2 + 15, ballY);
-                ctx.lineWidth = 2;
-                ctx.stroke();
-            } else if(state === 'playing') {
-                let progress = (Date.now() % 1000) / 1000;
-                let ballX = width/2 + (progress - 0.5) * 200;
-                let ballY = 300 - progress * 200;
-                ctx.beginPath();
-                ctx.arc(ballX, ballY, 20, 0, Math.PI * 2);
-                ctx.fillStyle = '#FF8C00';
-                ctx.fill();
-                ctx.fillStyle = '#000';
-                ctx.beginPath();
-                ctx.arc(ballX - 5, ballY - 5, 3, 0, Math.PI * 2);
-                ctx.fill();
-            } else if(state === 'win') {
-                ctx.beginPath();
-                ctx.arc(width/2, 220, 25, 0, Math.PI * 2);
-                ctx.fillStyle = '#FFD700';
-                ctx.fill();
-                ctx.fillStyle = '#FF8C00';
-                ctx.font = 'bold 30px Inter';
-                ctx.fillText('✓', width/2 - 12, 240);
-                ctx.fillStyle = '#34C759';
-                ctx.font = 'bold 20px Inter';
-                ctx.fillText('WIN!', width/2 - 25, 300);
-            } else if(state === 'lose') {
-                ctx.beginPath();
-                ctx.arc(width/2, 220, 25, 0, Math.PI * 2);
-                ctx.fillStyle = '#666';
-                ctx.fill();
-                ctx.fillStyle = '#FF3B30';
-                ctx.font = 'bold 30px Inter';
-                ctx.fillText('✗', width/2 - 10, 240);
-                ctx.fillStyle = '#FF3B30';
-                ctx.font = 'bold 20px Inter';
-                ctx.fillText('MISS!', width/2 - 28, 300);
-            }
-        }
-
-        // Отрисовка дартса
-        function drawDarts(ctx, width, height, state) {
-            ctx.clearRect(0, 0, width, height);
-            
-            // Фон
-            const gradient = ctx.createLinearGradient(0, 0, 0, height);
-            gradient.addColorStop(0, '#1a472a');
-            gradient.addColorStop(1, '#0d2818');
-            ctx.fillStyle = gradient;
-            ctx.fillRect(0, 0, width, height);
-            
-            // Мишень
-            const centerX = width/2;
-            const centerY = 150;
-            const rings = [40, 32, 24, 16, 8];
-            const colors = ['#FF3B30', '#FFFFFF', '#FF3B30', '#FFFFFF', '#FF3B30'];
-            for(let i = 0; i < rings.length; i++) {
-                ctx.beginPath();
-                ctx.arc(centerX, centerY, rings[i], 0, Math.PI * 2);
-                ctx.fillStyle = colors[i];
-                ctx.fill();
-            }
-            ctx.beginPath();
-            ctx.arc(centerX, centerY, 4, 0, Math.PI * 2);
-            ctx.fillStyle = '#FFD700';
-            ctx.fill();
-            
-            // Дротик
-            if(state === 'waiting') {
-                let angle = Date.now() / 500;
-                let x = centerX + Math.sin(angle) * 50;
-                let y = centerY - 60;
-                ctx.beginPath();
-                ctx.moveTo(x, y);
-                ctx.lineTo(x + 3, y + 30);
-                ctx.lineTo(x - 3, y + 30);
-                ctx.fillStyle = '#C0C0C0';
-                ctx.fill();
-                ctx.beginPath();
-                ctx.arc(x, y, 5, 0, Math.PI * 2);
-                ctx.fillStyle = '#FF4444';
-                ctx.fill();
-            } else if(state === 'playing') {
-                let progress = (Date.now() % 800) / 800;
-                let x = centerX + (1 - progress) * 100;
-                let y = centerY + (1 - progress) * 50;
-                ctx.beginPath();
-                ctx.moveTo(x, y);
-                ctx.lineTo(x + 3, y + 30);
-                ctx.lineTo(x - 3, y + 30);
-                ctx.fillStyle = '#C0C0C0';
-                ctx.fill();
-                ctx.beginPath();
-                ctx.arc(x, y, 5, 0, Math.PI * 2);
-                ctx.fillStyle = '#FF4444';
-                ctx.fill();
-            } else if(state === 'win') {
-                ctx.beginPath();
-                ctx.arc(centerX, centerY, 20, 0, Math.PI * 2);
-                ctx.fillStyle = '#FFD700';
-                ctx.fill();
-                ctx.fillStyle = '#34C759';
-                ctx.font = 'bold 20px Inter';
-                ctx.fillText('WIN!', centerX - 25, centerY + 8);
-            } else if(state === 'lose') {
-                ctx.fillStyle = '#FF3B30';
-                ctx.font = 'bold 20px Inter';
-                ctx.fillText('MISS!', centerX - 25, centerY + 8);
-            }
-        }
-
-        function animateGame(game) {
-            const canvas = document.getElementById(`${game}Canvas`);
-            if(!canvas) return;
-            const ctx = canvas.getContext('2d');
-            const width = canvas.clientWidth;
-            const height = canvas.clientHeight;
-            canvas.width = width;
-            canvas.height = height;
-            
-            function animate() {
-                if(game === 'basketball') {
-                    drawBasketball(ctx, width, height, currentGameState[game]);
-                } else {
-                    drawDarts(ctx, width, height, currentGameState[game]);
-                }
-                animationFrames[game] = requestAnimationFrame(animate);
-            }
-            animate();
-        }
-
-        function setGameState(game, state) {
-            currentGameState[game] = state;
-        }
-
-        function playFadeTransition(game) {
-            return new Promise((resolve) => {
-                const overlay = document.getElementById(`${game}Overlay`);
-                overlay.classList.add('fade');
-                setTimeout(resolve, 500);
-            });
-        }
-
-        function removeFade(game) {
-            document.getElementById(`${game}Overlay`).classList.remove('fade');
-        }
-
-        async function shootGame(game) {
-            if (isGamePlaying[game]) return;
-            const betAmount = parseFloat(document.getElementById(`${game}BetInput`).value);
-            if (!validateBet(game, betAmount)) return;
-            
-            const config = gameConfigs[game];
-            isGamePlaying[game] = true;
-            gameState.balance -= betAmount;
-            gameState.totalBets++;
-            gameState.totalTurnover += betAmount;
-            updateBalanceDisplay();
-            saveState();
-            
-            const shootBtn = document.getElementById(`${game}ShootBtn`);
-            const gameStatus = document.getElementById(`${game}Status`);
-            const resultDisplay = document.getElementById(`${game}Result`);
-            
-            shootBtn.disabled = true;
-            shootBtn.textContent = config.buttonText.playing;
-            gameStatus.textContent = config.statusText.playing;
-            resultDisplay.classList.remove('show');
-            
-            let isWin;
-            if (gameState.winStreakGames > 0) {
-                isWin = true;
-                gameState.winStreakGames--;
-                showNotification(`✨ Активирован гарантированный выигрыш! Осталось игр: ${gameState.winStreakGames}`);
-                saveState();
-            } else {
-                isWin = Math.random() < config.winChance;
-            }
-            
-            try {
-                await playFadeTransition(game);
-                setGameState(game, 'waiting');
-                removeFade(game);
-                await new Promise(resolve => { gameTimeouts[game] = setTimeout(resolve, 2500); });
-                await playFadeTransition(game);
-                setGameState(game, isWin ? 'win' : 'lose');
-                removeFade(game);
-                
-                setTimeout(async () => {
-                    if (isWin) {
-                        const winAmount = betAmount * config.winMultiplier;
-                        gameState.balance += winAmount;
-                        gameState.totalWins++;
-                        updateBalanceDisplay();
-                        gameStatus.textContent = config.statusText.win;
-                        gameStatus.className = 'game-status win';
-                        document.getElementById(`${game}ResultAmount`).textContent = '+' + winAmount.toFixed(2) + ' TON';
-                        document.getElementById(`${game}ResultAmount`).className = 'result-amount win';
-                        document.getElementById(`${game}ResultText`).textContent = config.name + '! +' + winAmount.toFixed(2) + ' TON';
-                        showNotification(`🎉 Вы выиграли ${winAmount.toFixed(2)} TON в ${config.name}!`);
-                        addToHistory(game, config.name, 'win', winAmount);
-                    } else {
-                        gameState.totalLosses++;
-                        gameStatus.textContent = config.statusText.lose;
-                        gameStatus.className = 'game-status lose';
-                        document.getElementById(`${game}ResultAmount`).textContent = '-' + betAmount.toFixed(2) + ' TON';
-                        document.getElementById(`${game}ResultAmount`).className = 'result-amount lose';
-                        document.getElementById(`${game}ResultText`).textContent = 'Проигрыш -' + betAmount.toFixed(2) + ' TON';
-                        showNotification(`😔 Вы проиграли ${betAmount.toFixed(2)} TON в ${config.name}`);
-                        addToHistory(game, config.name, 'lose', betAmount);
-                    }
-                    document.getElementById(`${game}Result`).classList.add('show');
-                    updateStatsDisplay();
-                    saveState();
-                    
-                    setTimeout(async () => {
-                        await playFadeTransition(game);
-                        setGameState(game, 'waiting');
-                        removeFade(game);
-                        resetGame(game, config);
-                    }, 2000);
-                }, 2500);
-            } catch (error) { 
-                resetGame(game, config); 
-            }
-        }
-
-        function resetGame(game, config) {
-            if (gameTimeouts[game]) clearTimeout(gameTimeouts[game]);
-            isGamePlaying[game] = false;
-            const shootBtn = document.getElementById(`${game}ShootBtn`);
-            shootBtn.disabled = false;
-            shootBtn.textContent = config.buttonText.idle;
-            document.getElementById(`${game}Status`).textContent = config.statusText.waiting;
-            document.getElementById(`${game}Status`).className = 'game-status waiting';
-        }
 
         const gameConfigs = {
             basketball: {
                 name: 'Баскетбол', winChance: 0.45, winMultiplier: 2.0,
+                images: { waiting: YOUR_BASKETBALL_WAITING, win: YOUR_BASKETBALL_WIN, lose: YOUR_BASKETBALL_LOSE },
                 statusText: { waiting: '🏀 Сделайте ставку и бросайте мяч!', playing: '🏀 Мяч в полёте...', win: '🎉 ПОПАДАНИЕ! Вы выиграли!', lose: '💔 ПРОМАХ! Попробуйте ещё раз' },
                 buttonText: { idle: '🏀 Поставить и бросить', playing: '🎯 Бросаем...' }
             },
             darts: {
                 name: 'Дартс', winChance: 0.40, winMultiplier: 2.2,
+                images: { waiting: YOUR_DARTS_WAITING, win: YOUR_DARTS_WIN, lose: YOUR_DARTS_LOSE },
                 statusText: { waiting: '🎯 Сделайте ставку и метайте дротик!', playing: '🎯 Дротик в полёте...', win: '🎯 ТОЧНОЕ ПОПАДАНИЕ! Вы выиграли!', lose: '💔 ПРОМАХ! Попробуйте ещё раз' },
                 buttonText: { idle: '🎯 Поставить и метнуть', playing: '🎯 Метаем...' }
             }
@@ -1027,6 +760,124 @@
             if (amount < 0.1) { showNotification('Минимальная ставка: 0.1 TON'); return false; }
             if (amount > gameState.balance) { showNotification('Недостаточно средств'); return false; }
             return true;
+        }
+
+        function changeVideo(game, videoUrl) {
+            return new Promise((resolve, reject) => {
+                const video = document.getElementById(`${game}Video`);
+                if (!video) { reject(); return; }
+                video.pause();
+                video.src = videoUrl;
+                video.load();
+                video.play().catch(e => console.log('play error', e));
+                video.oncanplay = () => resolve();
+                video.onerror = () => reject();
+                setTimeout(() => resolve(), 2000);
+            });
+        }
+
+        function playFadeTransition(game) {
+            return new Promise((resolve) => {
+                const overlay = document.getElementById(`${game}Overlay`);
+                overlay.classList.add('fade');
+                setTimeout(resolve, 500);
+            });
+        }
+
+        function removeFade(game) {
+            document.getElementById(`${game}Overlay`).classList.remove('fade');
+        }
+
+        async function shootGame(game) {
+            if (isGamePlaying[game]) return;
+            const betAmount = parseFloat(document.getElementById(`${game}BetInput`).value);
+            if (!validateBet(game, betAmount)) return;
+            
+            const config = gameConfigs[game];
+            isGamePlaying[game] = true;
+            gameState.balance -= betAmount;
+            gameState.totalBets++;
+            gameState.totalTurnover += betAmount;
+            updateBalanceDisplay();
+            saveState();
+            
+            const shootBtn = document.getElementById(`${game}ShootBtn`);
+            const gameStatus = document.getElementById(`${game}Status`);
+            const resultDisplay = document.getElementById(`${game}Result`);
+            
+            shootBtn.disabled = true;
+            shootBtn.textContent = config.buttonText.playing;
+            gameStatus.textContent = config.statusText.playing;
+            resultDisplay.classList.remove('show');
+            
+            let isWin;
+            if (gameState.winStreakGames > 0) {
+                isWin = true;
+                gameState.winStreakGames--;
+                showNotification(`✨ Активирован гарантированный выигрыш! Осталось игр: ${gameState.winStreakGames}`);
+                saveState();
+            } else {
+                isWin = Math.random() < config.winChance;
+            }
+            
+            const resultVideoUrl = isWin ? config.images.win : config.images.lose;
+            
+            try {
+                await playFadeTransition(game);
+                await changeVideo(game, config.images.waiting);
+                removeFade(game);
+                await new Promise(resolve => { gameTimeouts[game] = setTimeout(resolve, 3012); });
+                await playFadeTransition(game);
+                await changeVideo(game, resultVideoUrl);
+                removeFade(game);
+                
+                setTimeout(async () => {
+                    if (isWin) {
+                        const winAmount = betAmount * config.winMultiplier;
+                        gameState.balance += winAmount;
+                        gameState.totalWins++;
+                        updateBalanceDisplay();
+                        gameStatus.textContent = config.statusText.win;
+                        gameStatus.className = 'game-status win';
+                        document.getElementById(`${game}ResultAmount`).textContent = '+' + winAmount.toFixed(2) + ' TON';
+                        document.getElementById(`${game}ResultAmount`).className = 'result-amount win';
+                        document.getElementById(`${game}ResultText`).textContent = config.name + '! +' + winAmount.toFixed(2) + ' TON';
+                        showNotification(`🎉 Вы выиграли ${winAmount.toFixed(2)} TON в ${config.name}!`);
+                        addToHistory(game, config.name, 'win', winAmount);
+                    } else {
+                        gameState.totalLosses++;
+                        gameStatus.textContent = config.statusText.lose;
+                        gameStatus.className = 'game-status lose';
+                        document.getElementById(`${game}ResultAmount`).textContent = '-' + betAmount.toFixed(2) + ' TON';
+                        document.getElementById(`${game}ResultAmount`).className = 'result-amount lose';
+                        document.getElementById(`${game}ResultText`).textContent = 'Проигрыш -' + betAmount.toFixed(2) + ' TON';
+                        showNotification(`😔 Вы проиграли ${betAmount.toFixed(2)} TON в ${config.name}`);
+                        addToHistory(game, config.name, 'lose', betAmount);
+                    }
+                    document.getElementById(`${game}Result`).classList.add('show');
+                    updateStatsDisplay();
+                    saveState();
+                    
+                    setTimeout(async () => {
+                        await playFadeTransition(game);
+                        await changeVideo(game, config.images.waiting);
+                        removeFade(game);
+                        resetGame(game, config);
+                    }, 2000);
+                }, 3000);
+            } catch (error) { 
+                resetGame(game, config); 
+            }
+        }
+
+        function resetGame(game, config) {
+            if (gameTimeouts[game]) clearTimeout(gameTimeouts[game]);
+            isGamePlaying[game] = false;
+            const shootBtn = document.getElementById(`${game}ShootBtn`);
+            shootBtn.disabled = false;
+            shootBtn.textContent = config.buttonText.idle;
+            document.getElementById(`${game}Status`).textContent = config.statusText.waiting;
+            document.getElementById(`${game}Status`).className = 'game-status waiting';
         }
 
         function switchGame(game) {
@@ -1151,7 +1002,7 @@
             } else closeAvatarModal();
         }
 
-        function initGame() {
+        async function initGame() {
             loadState();
             checkReferral();
             const savedTheme = localStorage.getItem('haunterTheme');
@@ -1174,8 +1025,11 @@
                 }
             });
             
-            animateGame('basketball');
-            animateGame('darts');
+            try {
+                await changeVideo('basketball', gameConfigs.basketball.images.waiting);
+                await changeVideo('darts', gameConfigs.darts.images.waiting);
+                console.log('Games initialized with YOUR GIFs from imgbb');
+            } catch (error) { console.error(error); }
         }
         
         document.addEventListener('DOMContentLoaded', initGame);
